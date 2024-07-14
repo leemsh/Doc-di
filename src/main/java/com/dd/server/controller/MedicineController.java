@@ -1,14 +1,17 @@
 package com.dd.server.controller;
 
+import com.dd.server.dto.FindByMedicineChartDto;
+import com.dd.server.service.MedicineService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.processing.Find;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.nio.charset.Charset;
 
 @RestController
 @RequestMapping("/medicine")
@@ -24,12 +27,9 @@ public class MedicineController {
 
     @GetMapping(value = "/find")
     public ResponseEntity<SuccessResponse> getMedicine(
-            @RequestParam("color1") String color1,
-            @RequestParam("color2") String color2,
-            @RequestParam("shape") String shape,
-            @RequestParam("frontTxt") String txt1,
-            @RequestParam("backTxt") String txt2){
-        SuccessResponse response = this.medicineService.getMedicine(color1, color2, shape, txt1, txt2);
+            // 여기서 이 값들을 키밸류값으로 api 요청이 들어옴
+            @RequestBody @Valid FindByMedicineChartDto findByMedicineChartDto){
+        SuccessResponse response = this.medicineService.getMedicine(findByMedicineChartDto);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 
