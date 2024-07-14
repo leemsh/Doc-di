@@ -1,5 +1,14 @@
 package com.dd.server.service;
 
+import com.dd.server.dto.FindByMedicineChartDto;
+import com.dd.server.repository.MedicineRepository;
+import com.dd.server.domain.Medicine;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+
+@Service
+@RequiredArgsConstructor
 public class MedicineService {
     private final MedicineRepository medicineRepository;
 
@@ -9,9 +18,9 @@ public class MedicineService {
     * @return Medicine
      */
 
-    public SuccessResponse getMedicine(String color1, String color2, String shape, String txt1, String txt2){
+    public SuccessResponse getMedicine(FindByMedicineChartDto findByMedicineChartDto) {
         // API 요청해서 저장하기
-        Medicine byChartMedicine = this.medicineRepository.findByChartMedicine(color1, color2, shape, txt1, txt2);
+        Medicine byChartMedicine = this.medicineRepository.findByChartMedicine(findByMedicineChartDto);
 
         return new SuccessResponse(true, byChartMedicine);
     }
