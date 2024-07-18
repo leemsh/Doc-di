@@ -1,0 +1,19 @@
+#database 연동 설정
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    #PC에 만들어놓은 Database 이름 쓰기
+    url: jdbc:mysql://127.0.0.1:3306/db #database 이름
+    #mysql에 생성한 사용자 계정 정보를 써야 함
+    username: root
+    password: 403595
+  thymeleaf:
+    cache: false
+
+  #spring data jpa 설정
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL57Dialect
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
