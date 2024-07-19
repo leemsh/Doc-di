@@ -1,6 +1,7 @@
 package com.dd.server.controller;
 
 import com.dd.server.dto.FindByMedicineChartDto;
+import com.dd.server.dto.SuccessResponse;
 import com.dd.server.service.MedicineService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
