@@ -2,9 +2,12 @@ package com.dd.server.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+@Getter
+@Setter
 public class MedicineResponse {
 
     @JsonProperty("header")
@@ -13,18 +16,18 @@ public class MedicineResponse {
     @JsonProperty("body")
     private Body body;
 
-    // Getters and Setters
-
+    @Getter
+    @Setter
     public static class Header {
         @JsonProperty("resultCode")
         private String resultCode;
 
         @JsonProperty("resultMsg")
         private String resultMsg;
-
-        // Getters and Setters
     }
 
+    @Getter
+    @Setter
     public static class Body {
         @JsonProperty("pageNo")
         private int pageNo;
@@ -37,10 +40,10 @@ public class MedicineResponse {
 
         @JsonProperty("items")
         private List<Item> items;
-
-        // Getters and Setters
     }
 
+    @Getter
+    @Setter
     public static class Item {
         @JsonProperty("ITEM_SEQ")
         private String itemSeq;
@@ -137,8 +140,5 @@ public class MedicineResponse {
 
         @JsonProperty("BIZRNO")
         private String bizrno;
-
-        // Getters and Setters
-
     }
 }

@@ -1,7 +1,7 @@
 package com.dd.server.service;
 
 import com.dd.server.controller.MedicineApiDataController;
-import com.dd.server.controller.MedicineController;
+import com.dd.server.converter.MedicineConverter;
 import com.dd.server.dto.FindByMedicineChartDto;
 import com.dd.server.dto.MedicineResponse;
 import com.dd.server.dto.SuccessResponse;
@@ -10,6 +10,7 @@ import com.dd.server.domain.Medicine;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,24 +18,35 @@ public class MedicineService {
     private final MedicineRepository medicineRepository;
     private final MedicineApiDataController medicineApiDataController;
 
-    /*
-    * @description 알약 검색 컨트롤러
-    * @path /medicine/find
-    * @return Medicine
-     */
-
     public SuccessResponse getMedicine(FindByMedicineChartDto findByMedicineChartDto) {
-        // API 요청해서 저장하기
-        MedicineResponse medicineResponse = medicineApiDataController.getMedicineEntity(findByMedicineChartDto.color1);
+        // DTO에서 값을 추출
+        String color1 = findByMedicineChartDto.getColor1();
+        String color2 = findByMedicineChartDto.getColor2();
+        String shape = findByMedicineChartDto.getShape();
+        String txt1 = findByMedicineChartDto.getTxt1();
+        String txt2 = findByMedicineChartDto.getTxt2();
+
+        // API 요청
+        MedicineResponse medicineResponse = medicineApiDataController.getMedicineEntity(color1);
+        //color2 shape txt1 txt2도 다 해야함
 
 
+        if (medicineResponse == null || medicineResponse.getBody() == null || medicineResponse.getBody().getItems() == null) {
+            return new SuccessResponse(false, "No data received from API or response body is null");
+        }
 
-        //medicineResponse mySQL DB에 저장하기 (중복확인하기)
-        //TODO
+        // medicineResponse를 MySQL DB에 저장하기 (중복 확인하기)
+        for (MedicineResponse.Item item : medicineResponse.getBody().getItems()) {
+            Optional<Medicine> existingMedicine = medicineRepository.findByItemSeq(item.getItemSeq());
+            if (existingMedicine.isEmpty()) {
+                Medicine medicine = MedicineConverter.toEntity(item);
+                medicineRepository.save(medicine);
+            }
+        }
 
-        //mysql DB에서 찾아오기
-        Medicine byChartMedicine = this.medicineRepository.findByChartMedicine(findByMedicineChartDto);
+        // MySQL DB에서 찾아오기
+        Optional<Medicine> optionalMedicine = medicineRepository.findByChartMedicine(color1, color2, shape, txt1, txt2);
 
-        return new SuccessResponse(true, byChartMedicine);
+        return new SuccessResponse(true, optionalMedicine.orElse(null));
     }
 }
