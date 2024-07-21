@@ -26,10 +26,21 @@ public class MedicineController {
     * return : 약에 대한 정보
      */
 
-    @GetMapping(value = "/find")
+    @GetMapping(value = "/find", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse> getMedicine(
-            // 여기서 이 값들을 키밸류값으로 api 요청이 들어옴
-            @RequestBody @Valid FindByMedicineChartDto findByMedicineChartDto){
+            @RequestParam(required = false) String color1,
+            @RequestParam(required = false) String color2,
+            @RequestParam(required = false) String shape,
+            @RequestParam(required = false) String txt1,
+            @RequestParam(required = false) String txt2) {
+
+        FindByMedicineChartDto findByMedicineChartDto = new FindByMedicineChartDto();
+        findByMedicineChartDto.setColor1(color1);
+        findByMedicineChartDto.setColor2(color2);
+        findByMedicineChartDto.setShape(shape);
+        findByMedicineChartDto.setTxt1(txt1);
+        findByMedicineChartDto.setTxt2(txt2);
+
         SuccessResponse response = this.medicineService.getMedicine(findByMedicineChartDto);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));

@@ -1,18 +1,17 @@
-#database 연동 설정
+# database 연동 설정
 spring:
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    #PC에 만들어놓은 Database 이름 쓰기
-    url: ${SPRING_DATASOURCE_URL} #database 이름
-    #mysql에 생성한 사용자 계정 정보를 써야 함
+    driver-class-name: com.mysql.cj.jdbc.Driver # MySQL 8.0에 맞는 드라이버 클래스
+    url: jdbc:mysql://127.0.0.1:3306/dddb #${SPRING_DATASOURCE_URL} # database 이름
     username: root
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    password: 403595 #${SPRING_DATASOURCE_PASSWORD}
+
   thymeleaf:
     cache: false
 
-  #spring data jpa 설정
+  # spring data jpa 설정
   jpa:
-    database-platform: org.hibernate.dialect.MySQL57Dialect
+    database-platform: org.hibernate.dialect.MySQL8Dialect # MySQL 8.0에 맞는 Dialect
     open-in-view: false
     show-sql: true
     hibernate:
