@@ -7,7 +7,6 @@ public class MedicineConverter {
 
     public static Medicine toEntity(MedicineResponse.Item item) {
         Medicine medicine = new Medicine();
-        medicine.setItemSeq(item.getItemSeq());
         medicine.setItemName(item.getItemName());
         medicine.setEntpSeq(item.getEntpSeq());
         medicine.setEntpName(item.getEntpName());

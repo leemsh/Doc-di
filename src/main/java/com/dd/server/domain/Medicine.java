@@ -11,8 +11,9 @@ import lombok.Setter;
 public class Medicine {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "item_seq", nullable = false, unique = true)
-    private String itemSeq;
+    private Long itemSeq; // 변경: String -> Long
 
     @Column(name = "item_name")
     private String itemName;
