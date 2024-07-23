@@ -1,6 +1,9 @@
 package com.dd.server.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,137 +11,149 @@ import java.util.List;
 
 @Getter
 @Setter
+@JacksonXmlRootElement(localName = "response")
+@JsonIgnoreProperties(ignoreUnknown = true) // 여기에 어노테이션 추가
 public class MedicineResponse {
 
-    @JsonProperty("header")
+
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "header")
     private Header header;
 
-    @JsonProperty("body")
+    @JacksonXmlProperty(localName = "body")
     private Body body;
 
     @Getter
     @Setter
+    @JsonIgnoreProperties(ignoreUnknown = true) // 여기에 어노테이션 추가
     public static class Header {
-        @JsonProperty("resultCode")
+        @JacksonXmlProperty(localName = "resultCode")
         private String resultCode;
 
-        @JsonProperty("resultMsg")
+        @JacksonXmlProperty(localName = "resultMsg")
         private String resultMsg;
+
+        // cmmMsgHeader 필드 추가 (필요한 경우 주석 해제)
+        // @JacksonXmlProperty(localName = "cmmMsgHeader")
+        // private String cmmMsgHeader;
     }
 
     @Getter
     @Setter
+    @JsonIgnoreProperties(ignoreUnknown = true) // 여기에 어노테이션 추가
     public static class Body {
-        @JsonProperty("pageNo")
-        private int pageNo;
-
-        @JsonProperty("totalCount")
-        private int totalCount;
-
-        @JsonProperty("numOfRows")
+        @JacksonXmlProperty(localName = "numOfRows")
         private int numOfRows;
 
-        @JsonProperty("items")
+        @JacksonXmlProperty(localName = "pageNo")
+        private int pageNo;
+
+        @JacksonXmlProperty(localName = "totalCount")
+        private int totalCount;
+
+        @JacksonXmlProperty(localName = "items")
+        @JacksonXmlElementWrapper(useWrapping = false)
         private List<Item> items;
     }
 
     @Getter
     @Setter
+    @JsonIgnoreProperties(ignoreUnknown = true) // 여기에 어노테이션 추가
     public static class Item {
-        @JsonProperty("ITEM_SEQ")
-        private String itemSeq;
+        @JacksonXmlProperty(localName = "ITEM_SEQ")
+        private Long itemSeq;
 
-        @JsonProperty("ITEM_NAME")
+        @JacksonXmlProperty(localName = "ITEM_NAME")
         private String itemName;
 
-        @JsonProperty("ENTP_SEQ")
+        @JacksonXmlProperty(localName = "ENTP_SEQ")
         private String entpSeq;
 
-        @JsonProperty("ENTP_NAME")
+        @JacksonXmlProperty(localName = "ENTP_NAME")
         private String entpName;
 
-        @JsonProperty("CHART")
+        @JacksonXmlProperty(localName = "CHART")
         private String chart;
 
-        @JsonProperty("ITEM_IMAGE")
+        @JacksonXmlProperty(localName = "ITEM_IMAGE")
         private String itemImage;
 
-        @JsonProperty("PRINT_FRONT")
+        @JacksonXmlProperty(localName = "PRINT_FRONT")
         private String printFront;
 
-        @JsonProperty("PRINT_BACK")
+        @JacksonXmlProperty(localName = "PRINT_BACK")
         private String printBack;
 
-        @JsonProperty("DRUG_SHAPE")
+        @JacksonXmlProperty(localName = "DRUG_SHAPE")
         private String drugShape;
 
-        @JsonProperty("COLOR_CLASS1")
+        @JacksonXmlProperty(localName = "COLOR_CLASS1")
         private String colorClass1;
 
-        @JsonProperty("COLOR_CLASS2")
+        @JacksonXmlProperty(localName = "COLOR_CLASS2")
         private String colorClass2;
 
-        @JsonProperty("LINE_FRONT")
+        @JacksonXmlProperty(localName = "LINE_FRONT")
         private String lineFront;
 
-        @JsonProperty("LINE_BACK")
+        @JacksonXmlProperty(localName = "LINE_BACK")
         private String lineBack;
 
-        @JsonProperty("LENG_LONG")
+        @JacksonXmlProperty(localName = "LENG_LONG")
         private String lengLong;
 
-        @JsonProperty("LENG_SHORT")
+        @JacksonXmlProperty(localName = "LENG_SHORT")
         private String lengShort;
 
-        @JsonProperty("THICK")
+        @JacksonXmlProperty(localName = "THICK")
         private String thick;
 
-        @JsonProperty("IMG_REGIST_TS")
+        @JacksonXmlProperty(localName = "IMG_REGIST_TS")
         private String imgRegistTs;
 
-        @JsonProperty("CLASS_NO")
+        @JacksonXmlProperty(localName = "CLASS_NO")
         private String classNo;
 
-        @JsonProperty("CLASS_NAME")
+        @JacksonXmlProperty(localName = "CLASS_NAME")
         private String className;
 
-        @JsonProperty("ETC_OTC_NAME")
+        @JacksonXmlProperty(localName = "ETC_OTC_NAME")
         private String etcOtcName;
 
-        @JsonProperty("ITEM_PERMIT_DATE")
+        @JacksonXmlProperty(localName = "ITEM_PERMIT_DATE")
         private String itemPermitDate;
 
-        @JsonProperty("FORM_CODE_NAME")
+        @JacksonXmlProperty(localName = "FORM_CODE_NAME")
         private String formCodeName;
 
-        @JsonProperty("MARK_CODE_FRONT_ANAL")
+        @JacksonXmlProperty(localName = "MARK_CODE_FRONT_ANAL")
         private String markCodeFrontAnal;
 
-        @JsonProperty("MARK_CODE_BACK_ANAL")
+        @JacksonXmlProperty(localName = "MARK_CODE_BACK_ANAL")
         private String markCodeBackAnal;
 
-        @JsonProperty("MARK_CODE_FRONT_IMG")
+        @JacksonXmlProperty(localName = "MARK_CODE_FRONT_IMG")
         private String markCodeFrontImg;
 
-        @JsonProperty("MARK_CODE_BACK_IMG")
+        @JacksonXmlProperty(localName = "MARK_CODE_BACK_IMG")
         private String markCodeBackImg;
 
-        @JsonProperty("ITEM_ENG_NAME")
+        @JacksonXmlProperty(localName = "ITEM_ENG_NAME")
         private String itemEngName;
 
-        @JsonProperty("CHANGE_DATE")
+        @JacksonXmlProperty(localName = "CHANGE_DATE")
         private String changeDate;
 
-        @JsonProperty("MARK_CODE_FRONT")
+        @JacksonXmlProperty(localName = "MARK_CODE_FRONT")
         private String markCodeFront;
 
-        @JsonProperty("MARK_CODE_BACK")
+        @JacksonXmlProperty(localName = "MARK_CODE_BACK")
         private String markCodeBack;
 
-        @JsonProperty("EDI_CODE")
+        @JacksonXmlProperty(localName = "EDI_CODE")
         private String ediCode;
 
-        @JsonProperty("BIZRNO")
+        @JacksonXmlProperty(localName = "BIZRNO")
         private String bizrno;
     }
 }

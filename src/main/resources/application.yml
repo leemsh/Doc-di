@@ -11,7 +11,6 @@ spring:
 
   # spring data jpa 설정
   jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect # MySQL 8.0에 맞는 Dialect
     open-in-view: false
     show-sql: true
     hibernate:
