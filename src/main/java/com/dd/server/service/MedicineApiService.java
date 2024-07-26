@@ -3,6 +3,7 @@ package com.dd.server.service;
 import com.dd.server.dto.FindByMedicineChartDto;
 import com.dd.server.dto.MedicineResponse;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class MedicineApiService {
     public MedicineApiService(WebClient webClient, XmlMapper xmlMapper) {
         this.webClient = webClient;
         this.xmlMapper = xmlMapper;
+        this.xmlMapper.registerModule(new JaxbAnnotationModule());
     }
 
     public Mono<MedicineResponse> getMedicineFromApi(FindByMedicineChartDto findByMedicineChartDto) {
@@ -37,8 +39,8 @@ public class MedicineApiService {
         try {
             encodedColor1 = URLEncoder.encode(findByMedicineChartDto.getColor1(), StandardCharsets.UTF_8.toString());
         } catch (Exception e) {
-            logger.error("Failed to encode color1 parameter", e);
-            return Mono.error(new RuntimeException("Failed to encode color1 parameter", e));
+            logger.error("Failed to encode parameter", e);
+            return Mono.error(new RuntimeException("Failed to encode parameter", e));
         }
 
         String uri = UriComponentsBuilder.newInstance()
@@ -66,7 +68,7 @@ public class MedicineApiService {
         try {
             logger.info("Converting XML to MedicineResponse");
             MedicineResponse response = xmlMapper.readValue(xml, MedicineResponse.class);
-            logger.info("Converted MedicineResponse: " + response.toString());
+            logger.info("Converted MedicineResponse: " + response.getBody().getItems().get(0).getItemName());
             return response;
         } catch (Exception e) {
             logger.error("Failed to parse XML to MedicineResponse", e);

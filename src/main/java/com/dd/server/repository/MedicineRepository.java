@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MedicineRepository extends JpaRepository<Medicine, Long> {
@@ -20,7 +21,7 @@ public interface MedicineRepository extends JpaRepository<Medicine, Long> {
             "(:shape IS NULL OR m.drugShape = :shape) AND " +
             "(:txt1 IS NULL OR m.printFront LIKE %:txt1%) AND " +
             "(:txt2 IS NULL OR m.printBack LIKE %:txt2%)")
-    Optional<Medicine> findByChartMedicine(
+    List<Medicine> findByChartMedicine(
             @Param("color1") String color1,
             @Param("color2") String color2,
             @Param("shape") String shape,

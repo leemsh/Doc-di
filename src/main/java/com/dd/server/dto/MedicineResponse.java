@@ -12,11 +12,9 @@ import java.util.List;
 @Getter
 @Setter
 @JacksonXmlRootElement(localName = "response")
-@JsonIgnoreProperties(ignoreUnknown = true) // 여기에 어노테이션 추가
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MedicineResponse {
 
-
-    @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "header")
     private Header header;
 
@@ -25,22 +23,18 @@ public class MedicineResponse {
 
     @Getter
     @Setter
-    @JsonIgnoreProperties(ignoreUnknown = true) // 여기에 어노테이션 추가
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Header {
         @JacksonXmlProperty(localName = "resultCode")
         private String resultCode;
 
         @JacksonXmlProperty(localName = "resultMsg")
         private String resultMsg;
-
-        // cmmMsgHeader 필드 추가 (필요한 경우 주석 해제)
-        // @JacksonXmlProperty(localName = "cmmMsgHeader")
-        // private String cmmMsgHeader;
     }
 
     @Getter
     @Setter
-    @JsonIgnoreProperties(ignoreUnknown = true) // 여기에 어노테이션 추가
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Body {
         @JacksonXmlProperty(localName = "numOfRows")
         private int numOfRows;
@@ -52,13 +46,13 @@ public class MedicineResponse {
         private int totalCount;
 
         @JacksonXmlProperty(localName = "items")
-        @JacksonXmlElementWrapper(useWrapping = false)
+        @JacksonXmlElementWrapper(useWrapping = true)
         private List<Item> items;
     }
 
     @Getter
     @Setter
-    @JsonIgnoreProperties(ignoreUnknown = true) // 여기에 어노테이션 추가
+    //@JsonIgnoreProperties(ignoreUnknown = true)
     public static class Item {
         @JacksonXmlProperty(localName = "ITEM_SEQ")
         private Long itemSeq;

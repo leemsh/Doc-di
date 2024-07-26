@@ -2,6 +2,7 @@ package com.dd.server.dto;
 
 import lombok.Data;
 
+
 @Data
 public class SuccessResponse<T> {
     private boolean success;
