@@ -15,3 +15,10 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+
+
+  mvc:
+    contentnegotiation:
+      media-types:
+        json: application/json
+      default-media-type: application/json

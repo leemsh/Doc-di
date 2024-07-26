@@ -1,5 +1,6 @@
 package com.dd.server.controller;
 
+import com.dd.server.domain.Medicine;
 import com.dd.server.dto.FindByMedicineChartDto;
 import com.dd.server.dto.SuccessResponse;
 import com.dd.server.service.MedicineService;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.Charset;
+import java.util.List;
 
 @RestController
 @RequestMapping("/medicine")
@@ -27,7 +29,7 @@ public class MedicineController {
      */
 
     @GetMapping(value = "/find", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SuccessResponse> getMedicine(
+    public ResponseEntity<SuccessResponse<List<Medicine>>> getMedicine(
             @RequestParam(required = false) String color1,
             @RequestParam(required = false) String color2,
             @RequestParam(required = false) String shape,
@@ -41,9 +43,10 @@ public class MedicineController {
         findByMedicineChartDto.setTxt1(txt1);
         findByMedicineChartDto.setTxt2(txt2);
 
-        SuccessResponse response = this.medicineService.getMedicine(findByMedicineChartDto);
+        SuccessResponse<List<Medicine>> response = this.medicineService.getMedicine(findByMedicineChartDto);
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
 
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
