@@ -16,8 +16,6 @@ import org.slf4j.LoggerFactory;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import static java.util.Objects.isNull;
-
 @Service
 public class MedicineApiService {
 
@@ -38,26 +36,35 @@ public class MedicineApiService {
 
     public Mono<MedicineResponse> getMedicineFromApi(FindByMedicineChartDto findByMedicineChartDto) {
         String encodedName = null;
-        String encodedShape = null;
+        String encodedColor1 = null;
 
         try {
-            if(!isNull(findByMedicineChartDto.getName())) encodedName = URLEncoder.encode(findByMedicineChartDto.getName(), StandardCharsets.UTF_8.toString());
-            if(!isNull(findByMedicineChartDto.getShape())) encodedShape = URLEncoder.encode(findByMedicineChartDto.getShape(), StandardCharsets.UTF_8.toString());
+            if(findByMedicineChartDto.getName() != null) {
+                encodedName = URLEncoder.encode(findByMedicineChartDto.getName(), StandardCharsets.UTF_8.toString());
+            }
+            if(findByMedicineChartDto.getColor1() != null) {
+                encodedColor1 = URLEncoder.encode(findByMedicineChartDto.getColor1(), StandardCharsets.UTF_8.toString());
+            }
         } catch (Exception e) {
             logger.error("Failed to encode parameter", e);
             return Mono.error(new RuntimeException("Failed to encode parameter", e));
         }
 
-        String uri = UriComponentsBuilder.newInstance()
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder.newInstance()
                 .scheme("http")
                 .host(REQUEST_HOST)
                 .path(REQUEST_PATH)
                 .queryParam("serviceKey", KEY)
-                .queryParam("type", TYPE)
-                .queryParam("chart", encodedShape)
-                .queryParam("item_name", encodedName)
-                .build()
-                .toUriString();
+                .queryParam("type", TYPE);
+
+        if (encodedName != null) {
+            uriBuilder.queryParam("item_name", encodedName);
+        }
+        if (encodedColor1 != null) {
+            uriBuilder.queryParam("chart", encodedColor1);
+        }
+
+        String uri = uriBuilder.build().toUriString();
 
         logger.info("Request URL: {}", uri);
 
