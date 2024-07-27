@@ -85,7 +85,7 @@ public class MedicineApiService {
             return response;
         } catch (Exception e) {
             logger.error("Failed to parse XML to MedicineResponse", e);
-            throw new RuntimeException("Failed to parse XML to MedicineResponse", e);
+            return new MedicineResponse();
         }
     }
 }
