@@ -11,8 +11,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface MedicineRepository extends JpaRepository<Medicine, Long> {
-    Optional<Medicine> findByItemSeq(Long itemSeq);
+public interface MedicineRepository extends JpaRepository<Medicine, String> {
+    Optional<Medicine> findByItemName(String itemName);
 
 
     @Query("SELECT m FROM Medicine m WHERE " +

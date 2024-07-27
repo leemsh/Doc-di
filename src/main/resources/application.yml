@@ -2,9 +2,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver # MySQL 8.0에 맞는 드라이버 클래스
-    url: jdbc:mysql://127.0.0.1:3306/dddb #${SPRING_DATASOURCE_URL} # database 이름
+    url: jdbc:mysql://dddb.c3iucig8edyl.ap-northeast-2.rds.amazonaws.com:3306/dddb?serverTimezone=Asia/Seoul&characterEncoding=UTF-8 #${SPRING_DATASOURCE_URL} # database 이름
     username: root
-    password: 403595 #${SPRING_DATASOURCE_PASSWORD}
+    password: 403595sh #${SPRING_DATASOURCE_PASSWORD}
 
   thymeleaf:
     cache: false
