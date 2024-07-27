@@ -30,6 +30,7 @@ public class MedicineController {
 
     @GetMapping(value = "/find", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse<List<Medicine>>> getMedicine(
+            @RequestParam(required = false) String name,
             @RequestParam(required = false) String color1,
             @RequestParam(required = false) String color2,
             @RequestParam(required = false) String shape,
@@ -37,6 +38,7 @@ public class MedicineController {
             @RequestParam(required = false) String txt2) {
 
         FindByMedicineChartDto findByMedicineChartDto = new FindByMedicineChartDto();
+        findByMedicineChartDto.setName(name);
         findByMedicineChartDto.setColor1(color1);
         findByMedicineChartDto.setColor2(color2);
         findByMedicineChartDto.setShape(shape);

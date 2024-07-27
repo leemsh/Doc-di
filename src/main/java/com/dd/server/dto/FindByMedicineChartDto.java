@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class FindByMedicineChartDto {
+    public String name; //이름
     public String color1; //색1
     public String color2; //색2
     public String shape; // 제형

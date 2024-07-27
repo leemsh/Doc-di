@@ -30,25 +30,21 @@ public class MedicineService {
 
     public SuccessResponse<List<Medicine>> getMedicine(FindByMedicineChartDto findByMedicineChartDto) {
         // DTO에서 값을 추출
+        String name = findByMedicineChartDto.getName();
         String color1 = findByMedicineChartDto.getColor1();
         String color2 = findByMedicineChartDto.getColor2();
         String shape = findByMedicineChartDto.getShape();
         String txt1 = findByMedicineChartDto.getTxt1();
         String txt2 = findByMedicineChartDto.getTxt2();
 
-        logger.info("Received request with parameters: color1={}, color2={}, shape={}, txt1={}, txt2={}",
-                color1, color2, shape, txt1, txt2);
+        logger.info("Received request with parameters: name={}, color1={}, color2={}, shape={}, txt1={}, txt2={}",
+               name, color1, color2, shape, txt1, txt2);
+
 
         // API 요청
         MedicineResponse medicineResponse = medicineApiService.getMedicineFromApi(findByMedicineChartDto).block();
-        // color2, shape, txt1, txt2도 API 요청에 추가해야 합니다 (추가 로직 필요)
-
-        // if (medicineResponse == null || medicineResponse.getBody() == null || medicineResponse.getBody().getItems() == null) {
-        //     logger.warn("No data received from API or response body is null");
-        //     return new SuccessResponse(false, "No data received from API or response body is null");
-        // }
-
         logger.info("Received medicine response from API: {}", medicineResponse);
+
 
         // medicineResponse를 MySQL DB에 저장하기 (중복 확인하기)
         for (MedicineResponse.Item item : medicineResponse.getBody().getItems()) {
@@ -63,7 +59,7 @@ public class MedicineService {
         }
 
         // MySQL DB에서 찾아오기
-        List<Medicine> medicines = medicineRepository.findByChartMedicine(color1, color2, shape, txt1, txt2);
+        List<Medicine> medicines = medicineRepository.findByChartMedicine(name, color1, color2, shape, txt1, txt2);
 
         if (!medicines.isEmpty()) {
             logger.info("Found medicine(s) in database: {}", medicines);

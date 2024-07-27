@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+import static java.util.Objects.isNull;
+
 @Service
 public class MedicineApiService {
 
@@ -25,7 +27,7 @@ public class MedicineApiService {
     private static final String TYPE = "xml";
 
     private final WebClient webClient;
-    private final XmlMapper xmlMapper; // Jackson XML Mapper 추가
+    private final XmlMapper xmlMapper;
     private static final Logger logger = LoggerFactory.getLogger(MedicineApiService.class);
 
     public MedicineApiService(WebClient webClient, XmlMapper xmlMapper) {
@@ -35,9 +37,12 @@ public class MedicineApiService {
     }
 
     public Mono<MedicineResponse> getMedicineFromApi(FindByMedicineChartDto findByMedicineChartDto) {
-        String encodedColor1;
+        String encodedName = null;
+        String encodedShape = null;
+
         try {
-            encodedColor1 = URLEncoder.encode(findByMedicineChartDto.getColor1(), StandardCharsets.UTF_8.toString());
+            if(!isNull(findByMedicineChartDto.getName())) encodedName = URLEncoder.encode(findByMedicineChartDto.getName(), StandardCharsets.UTF_8.toString());
+            if(!isNull(findByMedicineChartDto.getShape())) encodedShape = URLEncoder.encode(findByMedicineChartDto.getShape(), StandardCharsets.UTF_8.toString());
         } catch (Exception e) {
             logger.error("Failed to encode parameter", e);
             return Mono.error(new RuntimeException("Failed to encode parameter", e));
@@ -49,7 +54,8 @@ public class MedicineApiService {
                 .path(REQUEST_PATH)
                 .queryParam("serviceKey", KEY)
                 .queryParam("type", TYPE)
-                .queryParam("chart", encodedColor1)
+                .queryParam("chart", encodedShape)
+                .queryParam("item_name", encodedName)
                 .build()
                 .toUriString();
 
@@ -59,9 +65,9 @@ public class MedicineApiService {
                 .uri(uri)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE)
                 .retrieve()
-                .bodyToMono(String.class) // XML 응답을 문자열로 받기
-                .doOnNext(response -> logger.info("Response Body: {}", response)) // 응답 로그 찍기
-                .map(this::convertXmlToMedicineResponse); // XML 문자열을 MedicineResponse로 변환
+                .bodyToMono(String.class)
+                .doOnNext(response -> logger.info("Response Body: {}", response))
+                .map(this::convertXmlToMedicineResponse);
     }
 
     private MedicineResponse convertXmlToMedicineResponse(String xml) {
