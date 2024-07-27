@@ -52,7 +52,7 @@ public class MedicineService {
 
         // medicineResponse를 MySQL DB에 저장하기 (중복 확인하기)
         for (MedicineResponse.Item item : medicineResponse.getBody().getItems()) {
-            Optional<Medicine> existingMedicine = medicineRepository.findByItemSeq(item.getItemSeq());
+            Optional<Medicine> existingMedicine = medicineRepository.findByItemName(item.getItemName());
             if (existingMedicine.isEmpty()) {
                 Medicine medicine = MedicineConverter.toEntity(item);
                 medicineRepository.save(medicine);
