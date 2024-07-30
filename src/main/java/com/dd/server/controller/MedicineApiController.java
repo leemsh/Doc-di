@@ -1,4 +1,4 @@
-package com.dd.server.service;
+package com.dd.server.controller;
 
 import com.dd.server.dto.FindByMedicineChartDto;
 import com.dd.server.dto.MedicineResponse;
@@ -17,7 +17,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 @Service
-public class MedicineApiService {
+public class MedicineApiController {
 
     private static final String REQUEST_HOST = "apis.data.go.kr";
     private static final String REQUEST_PATH = "/1471000/MdcinGrnIdntfcInfoService01/getMdcinGrnIdntfcInfoList01";
@@ -26,9 +26,9 @@ public class MedicineApiService {
 
     private final WebClient webClient;
     private final XmlMapper xmlMapper;
-    private static final Logger logger = LoggerFactory.getLogger(MedicineApiService.class);
+    private static final Logger logger = LoggerFactory.getLogger(MedicineApiController.class);
 
-    public MedicineApiService(WebClient webClient, XmlMapper xmlMapper) {
+    public MedicineApiController(WebClient webClient, XmlMapper xmlMapper) {
         this.webClient = webClient;
         this.xmlMapper = xmlMapper;
         this.xmlMapper.registerModule(new JaxbAnnotationModule());

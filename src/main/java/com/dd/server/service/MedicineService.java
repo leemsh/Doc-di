@@ -1,9 +1,9 @@
 package com.dd.server.service;
 
+import com.dd.server.controller.MedicineApiController;
+import com.dd.server.controller.MedicineInfoApiController;
 import com.dd.server.converter.MedicineConverter;
-import com.dd.server.dto.FindByMedicineChartDto;
-import com.dd.server.dto.MedicineResponse;
-import com.dd.server.dto.SuccessResponse;
+import com.dd.server.dto.*;
 import com.dd.server.repository.MedicineRepository;
 import com.dd.server.domain.Medicine;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +20,10 @@ public class MedicineService {
     private final MedicineRepository medicineRepository;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final MedicineApiService medicineApiService;
+    private final MedicineApiController medicineApiController;
 
-//    @Autowired
-//    public MedicineService(MedicineApiService medicineApiService){
-//        this.medicineApiService = medicineApiService;
-//        this.medicineRepository
-//    }
+    private final MedicineInfoApiController medicineInfoApiController;
+
 
     public SuccessResponse<List<Medicine>> getMedicine(FindByMedicineChartDto findByMedicineChartDto) {
         // DTO에서 값을 추출
@@ -42,7 +39,7 @@ public class MedicineService {
 
 
         // API 요청
-        MedicineResponse medicineResponse = medicineApiService.getMedicineFromApi(findByMedicineChartDto).block();
+        MedicineResponse medicineResponse = medicineApiController.getMedicineFromApi(findByMedicineChartDto).block();
         logger.info("Received medicine response from API: {}", medicineResponse);
 
 
@@ -71,5 +68,18 @@ public class MedicineService {
         }
 
         return new SuccessResponse<>(true, medicines);
+    }
+
+
+    public SuccessResponse<MedicineInfoDto> getMedicineInfo(String itemName){
+        logger.info("Received request with parameters: name={}", itemName);
+
+        MedicineInfoResponse medicineInfoResponse = medicineInfoApiController.getMedicineInfoFormApi(itemName).block();
+        if(medicineInfoResponse.getBody()!=null){
+            MedicineInfoDto medicineInfoDto = MedicineConverter.infoToDto(medicineInfoResponse.getBody().getItems().get(0));
+            return new SuccessResponse<>(true, medicineInfoDto);
+        }
+        return new SuccessResponse(false, "No data received from API or response body is null");
+
     }
 }
