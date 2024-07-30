@@ -2,18 +2,16 @@ package com.dd.server.controller;
 
 import com.dd.server.domain.Medicine;
 import com.dd.server.dto.FindByMedicineChartDto;
+import com.dd.server.dto.MedicineInfoDto;
 import com.dd.server.dto.SuccessResponse;
 import com.dd.server.service.MedicineService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.processing.Find;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.charset.Charset;
 import java.util.List;
 
 @RestController
@@ -21,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MedicineController {
     private final MedicineService medicineService;
+    private final MedicineInfoApiController medicineInfoApiController;
 
     /*
     * 알약 검색 컨트롤러
@@ -52,4 +51,18 @@ public class MedicineController {
 
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
+
+
+
+    @GetMapping(value = "/info", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<SuccessResponse<MedicineInfoDto>> getMedicineInfo(
+            @RequestParam(required = true) String name){
+
+        SuccessResponse<MedicineInfoDto> response = this.medicineService.getMedicineInfo(name);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
+    }
+
 }
