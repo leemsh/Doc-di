@@ -22,3 +22,8 @@ spring:
       media-types:
         json: application/json
       default-media-type: application/json
+
+
+
+  profiles:
+    include: jwt

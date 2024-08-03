@@ -1,11 +1,9 @@
 package com.dd.server.domain;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -14,13 +12,13 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
 @Table(name = "USERS")
-public class User {
+public class Users {
     @Id
     @GeneratedValue
     @Column(name = "user_id")
     private Long id;
 
-    @Column(length = 100, nullable = false, unique = true)
+    @Column(length = 100, nullable = false, unique = true, name = "email")
     private String email;
 
     @Column(length = 20, nullable = false)
@@ -44,7 +42,7 @@ public class User {
     @Column(length = 1000)
     private String refreshToken;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, name = "phone_num")
     private String phoneNum;
 
     public void updateRefreshToken (String refreshToken){
