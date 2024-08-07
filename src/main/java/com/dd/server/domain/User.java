@@ -7,14 +7,13 @@ import lombok.*;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@Getter
-@Builder
-@NoArgsConstructor(access = PROTECTED)
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "USERS")
-public class Users {
+@Table(name = "USER")
+public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
@@ -24,11 +23,14 @@ public class Users {
     @Column(length = 20, nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String name;
+
     @Column(length = 10, nullable = false)
     private String sex;
 
     @Column(nullable = false)
-    private int birthday;
+    private String birthday;
 
     @Column(nullable = false)
     private short height;
