@@ -18,16 +18,7 @@ public class JoinController {
         this.joinservice = joinService;
     }
     @PostMapping("/join")
-    public SuccessResponse<JoinDto> joinProcess(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String color1,
-            @RequestParam(required = false) String color2,
-            @RequestParam(required = false) String shape,
-            @RequestParam(required = false) String txt1,
-            @RequestParam(required = false) String txt2){
-
-
-        JoinDto joinDto = new JoinDto();
+    public SuccessResponse<JoinDto> joinProcess(JoinDto joinDto){
 
         SuccessResponse response = new SuccessResponse(joinservice.joinProcess(joinDto), joinDto);
         return response;
