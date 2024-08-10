@@ -1,11 +1,11 @@
 package com.dd.server.config;
 
 
+import com.dd.server.jwt.JWTFilter;
+import com.dd.server.jwt.JWTUtil;
 import com.dd.server.jwt.LoginFilter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,19 +17,24 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-//@RequiredArgsConstructor
 public class SecurityConfig {
 
+    //AuthenticationManager 가 인자로 받을 AuthenticationConfiguration 객체 생성자 주입
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final JWTUtil jwtUtil;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration){
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
+
         this.authenticationConfiguration = authenticationConfiguration;
+        this.jwtUtil = jwtUtil;
     }
+
+    //AuthenticationManager Bean 등록
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+
         return configuration.getAuthenticationManager();
     }
-
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
 
@@ -53,13 +58,17 @@ public class SecurityConfig {
         // 인가 설정
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/", "/join").permitAll()
-                        // .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/login", "/", "/join", "/medicine/find", "/medicine/info").permitAll()
                         .anyRequest().authenticated());
+
+        // jwtfilter등록
+        http
+                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+
 
         //필터 추가
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         //세션 설정
         http

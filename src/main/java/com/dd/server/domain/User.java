@@ -14,8 +14,7 @@ import static lombok.AccessLevel.PROTECTED;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long id;
+    private int id;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -46,6 +45,9 @@ public class User {
 
     @Column(nullable = false, unique = true, name = "phone_num")
     private String phoneNum;
+
+    @Column(nullable = false)
+    private String role;
 
     public void updateRefreshToken (String refreshToken){
         this.refreshToken = refreshToken;
