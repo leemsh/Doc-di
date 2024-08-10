@@ -16,7 +16,6 @@ public class JoinService {
 
     public boolean joinProcess(JoinDto joinDto){
 
-
         Boolean isExist = userRepository.existsByEmail(joinDto.getEmail());
 
         if(isExist){ // 회원정보가 이미 있음

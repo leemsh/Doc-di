@@ -19,7 +19,7 @@ public class UserJoinConverter {
         user.setWeight(joinDto.getWeight());
         user.setBloodType(joinDto.getBloodType());
         user.setPhoneNum(joinDto.getPhoneNum());
-
+        user.setRole("ROLE_ADMIN");
         return user;
     }
 }

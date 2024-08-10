@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class JoinDto {
 
-    private Long id;
+    private int id;
     private String email;
     private String password;
     private String name;
