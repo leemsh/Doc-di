@@ -1,0 +1,3 @@
+[submodule "pycode"]
+	path = pycode
+	url = https://github.com/zer0ken/Doc-di-ai.git
