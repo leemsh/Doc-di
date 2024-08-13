@@ -91,7 +91,7 @@ public class ReissueController {
         response.setHeader("access", newAccess);
         response.addCookie(createCookie("refresh", newRefresh));
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("refresh token reissue", HttpStatus.OK);
     }
 
     private void addRefreshEntity(String username, String refresh, Long expiredMs) {
