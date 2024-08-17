@@ -57,8 +57,8 @@ public class UserController {
 
         SuccessResponse<String> response;
 
-        User user = userService.deletetUser(email);
-        if(user != null)
+        User user = userService.deleteUser(email);
+        if(user == null)
             response = new SuccessResponse<>(true,"delete Complete");
         else
             response = new SuccessResponse<>(false,"delete failed");
