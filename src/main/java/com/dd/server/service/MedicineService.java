@@ -1,5 +1,6 @@
 package com.dd.server.service;
 
+import com.dd.model.PillPredictor;
 import com.dd.server.controller.MedicineApiController;
 import com.dd.server.controller.MedicineInfoApiController;
 import com.dd.server.converter.MedicineConverter;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,4 +84,14 @@ public class MedicineService {
         return new SuccessResponse(false, "No data received from API or response body is null");
 
     }
+
+    public SuccessResponse<List<Medicine>> getMedicineByImage(String filePath) throws IOException {
+        PillPredictor.predict(filePath);
+
+        //TODO 코드 작성
+        // 받아와서  객체 DTO로 넘겨줘야함
+
+        return new SuccessResponse(false, "predict fail");
+    }
+
 }
