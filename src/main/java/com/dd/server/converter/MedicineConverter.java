@@ -1,6 +1,8 @@
 package com.dd.server.converter;
 
+import com.dd.model.PillPredictor;
 import com.dd.server.domain.Medicine;
+import com.dd.server.dto.FindByMedicineChartDto;
 import com.dd.server.dto.MedicineInfoDto;
 import com.dd.server.dto.MedicineInfoResponse;
 import com.dd.server.dto.MedicineResponse;
@@ -58,5 +60,18 @@ public class MedicineConverter {
         medicineInfoDto.setOpenDe(item.getOpenDe());
 
         return medicineInfoDto;
+    }
+
+    public static FindByMedicineChartDto toDto(PillPredictor.PillPrediction prediction){
+
+        FindByMedicineChartDto dto = new FindByMedicineChartDto();
+
+        dto.setColor1(prediction.color1());
+        dto.setColor2(prediction.color2());
+        dto.setShape(prediction.shape());
+        dto.setTxt1(prediction.text1());
+        dto.setTxt2(prediction.text2());
+
+        return dto;
     }
 }
