@@ -85,13 +85,8 @@ public class MedicineService {
 
     }
 
+
     public SuccessResponse<List<Medicine>> getMedicineByImage(String filePath) throws IOException {
-        PillPredictor.predict(filePath);
-
-        //TODO 코드 작성
-        // 받아와서  객체 DTO로 넘겨줘야함
-
-        return new SuccessResponse(false, "predict fail");
+        return getMedicine(MedicineConverter.toDto(PillPredictor.predict(filePath)));
     }
-
 }

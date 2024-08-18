@@ -25,7 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MedicineController {
     private final MedicineService medicineService;
-    private final MedicineInfoApiController medicineInfoApiController;
 
     /*
     * 알약 검색 컨트롤러
@@ -62,7 +61,7 @@ public class MedicineController {
 
     @GetMapping(value = "/info", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse<MedicineInfoDto>> getMedicineInfo(
-            @RequestParam(required = true) String name){
+            @RequestParam String name){
 
         SuccessResponse<MedicineInfoDto> response = this.medicineService.getMedicineInfo(name);
         HttpHeaders headers = new HttpHeaders();
@@ -98,6 +97,12 @@ public class MedicineController {
 
             // 저장된 파일의 경로를 기반으로 Medicine 정보를 가져오는 서비스 호출
             SuccessResponse<List<Medicine>> response = this.medicineService.getMedicineByImage(filePath);
+
+            // 파일 삭제
+            boolean isDeleted = destinationFile.delete();
+            if (!isDeleted) {
+                throw new RuntimeException("Failed to delete file " + originalFilename);
+            }
 
             // 응답 생성
             HttpHeaders headers = new HttpHeaders();
