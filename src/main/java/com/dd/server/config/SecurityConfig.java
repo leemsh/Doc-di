@@ -64,7 +64,7 @@ public class SecurityConfig {
         // 인가 설정
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/", "/join", "/medicine/find", "/medicine/info", "/reissue").permitAll()
+                        .requestMatchers("/login", "/", "/join", "/medicine/find", "/medicine/info", "/medicine/image","/reissue").permitAll()
                         .anyRequest().authenticated());
 
         // JwtFilter 등록
