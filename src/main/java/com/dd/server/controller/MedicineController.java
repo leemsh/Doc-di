@@ -80,7 +80,7 @@ public class MedicineController {
         }
 
         // 파일 저장 경로 지정 (예: 서버의 "uploads" 디렉토리)
-        String uploadDir = "uploads/";
+        String uploadDir = "/opt/uploads/";
         String originalFilename = imageFile.getOriginalFilename();
         String filePath = uploadDir + originalFilename;
 
