@@ -87,6 +87,9 @@ public class MedicineController {
         }
         String filePath = uploadDir + originalFilename;
 
+        System.out.println("Upload directory: " + uploadDir);
+        System.out.println("File path: " + filePath);
+
         try {
             // 업로드 디렉토리 생성 (존재하지 않을 경우)
             Path uploadPath = Paths.get(uploadDir);
