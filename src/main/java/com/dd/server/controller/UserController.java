@@ -51,6 +51,7 @@ public class UserController {
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
+
     @DeleteMapping(value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse<String>> deleteUser(
             @RequestParam(required = true) String email){

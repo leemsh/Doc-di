@@ -1,6 +1,5 @@
 package com.dd.server.dto;
 
-import jakarta.persistence.Column;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,4 +17,5 @@ public class UserDto {
     private String bloodType;
     private String phoneNum;
     private String role;
+    private String image;
 }
