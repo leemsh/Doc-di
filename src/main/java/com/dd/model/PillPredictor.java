@@ -64,6 +64,6 @@ public class PillPredictor {
     }
 
     public static void main(String[] args) throws IOException {
-        predict("./datasets/test_images/image5.png");
+        predict("c:/opt/uploads/e0a05cd4-c1cc-457a-a345-cd8bf283a013_profile.jpg");
     }
 }
