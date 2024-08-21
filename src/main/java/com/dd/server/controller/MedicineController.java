@@ -6,6 +6,8 @@ import com.dd.server.dto.MedicineInfoDto;
 import com.dd.server.dto.SuccessResponse;
 import com.dd.server.service.MedicineService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -71,11 +73,14 @@ public class MedicineController {
     }
 
 
+    private static final Logger logger = LoggerFactory.getLogger(MedicineController.class);
+
     @PostMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse<List<Medicine>>> getMedicineByImage(
             @RequestPart("image") MultipartFile imageFile) {
 
         if (imageFile.isEmpty()) {
+            logger.error("Error: File is missing");
             throw new IllegalArgumentException("File is missing");
         }
 
@@ -83,34 +88,44 @@ public class MedicineController {
         String uploadDir = "/opt/uploads/";
         String originalFilename = imageFile.getOriginalFilename();
         if (originalFilename == null || originalFilename.contains("..")) {
+            logger.error("Error: Invalid file name {}", originalFilename);
             throw new IllegalArgumentException("Invalid file name");
         }
         String filePath = uploadDir + originalFilename;
 
-        System.out.println("Upload directory: " + uploadDir);
-        System.out.println("File path: " + filePath);
+        logger.info("Upload directory: {}", uploadDir);
+        logger.info("File path: {}", filePath);
 
         try {
             // 업로드 디렉토리 생성 (존재하지 않을 경우)
             Path uploadPath = Paths.get(uploadDir);
             if (!Files.exists(uploadPath)) {
+                logger.info("Directory does not exist. Creating directory: {}", uploadPath.toString());
                 Files.createDirectories(uploadPath);
+                logger.info("Directory created successfully.");
+            } else {
+                logger.info("Directory already exists: {}", uploadPath.toString());
             }
 
             // 파일 저장
             File destinationFile = new File(filePath);
+            logger.info("Saving file to: {}", filePath);
             imageFile.transferTo(destinationFile);
+            logger.info("File saved successfully: {}", filePath);
 
             // 저장된 파일의 경로를 기반으로 Medicine 정보를 가져오는 서비스 호출
+            logger.info("Calling medicine service with file: {}", filePath);
             SuccessResponse<List<Medicine>> response = this.medicineService.getMedicineByImage(filePath);
+            logger.info("Medicine service returned successfully.");
 
             // 파일 삭제
+            logger.info("Deleting file: {}", filePath);
             boolean isDeleted = destinationFile.delete();
             if (!isDeleted) {
-                // 로깅 추가
-                System.err.println("Failed to delete file " + originalFilename);
-                // 예외를 그대로 던지거나 적절한 예외 처리
+                logger.error("Failed to delete file {}", originalFilename);
                 throw new RuntimeException("Failed to delete file " + originalFilename);
+            } else {
+                logger.info("File deleted successfully: {}", filePath);
             }
 
             // 응답 생성
@@ -120,10 +135,10 @@ public class MedicineController {
             return new ResponseEntity<>(response, headers, HttpStatus.OK);
 
         } catch (IOException e) {
-            // 파일 저장 중 예외 처리
+            logger.error("IOException occurred while processing file {}", originalFilename, e);
             throw new RuntimeException("Failed to store file " + originalFilename, e);
         } catch (Exception e) {
-            // 모든 예외 처리
+            logger.error("An unexpected error occurred while processing file {}", originalFilename, e);
             throw new RuntimeException("An unexpected error occurred", e);
         }
     }
