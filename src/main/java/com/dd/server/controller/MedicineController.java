@@ -82,6 +82,9 @@ public class MedicineController {
         // 파일 저장 경로 지정 (예: 서버의 "uploads" 디렉토리)
         String uploadDir = "/opt/uploads/";
         String originalFilename = imageFile.getOriginalFilename();
+        if (originalFilename == null || originalFilename.contains("..")) {
+            throw new IllegalArgumentException("Invalid file name");
+        }
         String filePath = uploadDir + originalFilename;
 
         try {
@@ -101,6 +104,9 @@ public class MedicineController {
             // 파일 삭제
             boolean isDeleted = destinationFile.delete();
             if (!isDeleted) {
+                // 로깅 추가
+                System.err.println("Failed to delete file " + originalFilename);
+                // 예외를 그대로 던지거나 적절한 예외 처리
                 throw new RuntimeException("Failed to delete file " + originalFilename);
             }
 
@@ -113,6 +119,10 @@ public class MedicineController {
         } catch (IOException e) {
             // 파일 저장 중 예외 처리
             throw new RuntimeException("Failed to store file " + originalFilename, e);
+        } catch (Exception e) {
+            // 모든 예외 처리
+            throw new RuntimeException("An unexpected error occurred", e);
         }
     }
+
 }
