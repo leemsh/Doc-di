@@ -5,6 +5,7 @@ import com.dd.server.dto.SuccessResponse;
 import com.dd.server.service.JoinService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -12,15 +13,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ResponseBody
 public class JoinController {
 
-    private final JoinService joinservice;
+    private final JoinService joinService;
 
     public JoinController(JoinService joinService){
-        this.joinservice = joinService;
+        this.joinService = joinService;
     }
     @PostMapping("/join")
-    public SuccessResponse<JoinDto> joinProcess(JoinDto joinDto){
-
-        SuccessResponse response = new SuccessResponse(joinservice.joinProcess(joinDto), joinDto);
-        return response;
+    public SuccessResponse<JoinDto> joinProcess(@RequestBody JoinDto joinDto){
+        boolean result = joinService.joinProcess(joinDto);
+        return new SuccessResponse<>(result, joinDto);
     }
 }

@@ -1,10 +1,12 @@
 package com.dd.server.controller;
 
 import com.dd.server.domain.Medicine;
-import com.dd.server.dto.FindByMedicineChartDto;
-import com.dd.server.dto.MedicineInfoDto;
+import com.dd.server.domain.Profile;
+import com.dd.server.domain.User;
+import com.dd.server.dto.ProfileDto;
 import com.dd.server.dto.SuccessResponse;
-import com.dd.server.service.MedicineService;
+import com.dd.server.dto.UserDto;
+import com.dd.server.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,44 +26,33 @@ import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
-@RequestMapping("/medicine")
+@RequestMapping("/profile")
 @RequiredArgsConstructor
-public class MedicineController {
-    private final MedicineService medicineService;
+public class ProfileController {
 
-    /*
-    * 알약 검색 컨트롤러
-    * path : /medicine/find
-    * return : 약에 대한 정보
-     */
+    private final ProfileService profileService;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @PostMapping(value = "/find", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SuccessResponse<List<Medicine>>> getMedicine(@RequestBody FindByMedicineChartDto findByMedicineChartDto) {
 
-        SuccessResponse<List<Medicine>> response = this.medicineService.getMedicine(findByMedicineChartDto);
+    @GetMapping(value = "/find", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<SuccessResponse<Profile>> getProfile(@RequestParam String email) {
+        Profile profile = profileService.getProfile(email);
+        SuccessResponse<Profile> response;
+        if(profile != null)
+            response = new SuccessResponse<>(true, profile);
+        else
+            response = new SuccessResponse<>(false, null);
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
-
-
-    @GetMapping(value = "/info", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SuccessResponse<MedicineInfoDto>> getMedicineInfo(@RequestParam String name){
-
-        SuccessResponse<MedicineInfoDto> response = this.medicineService.getMedicineInfo(name);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        return new ResponseEntity<>(response, headers, HttpStatus.OK);
-    }
-
-
-    private static final Logger logger = LoggerFactory.getLogger(MedicineController.class);
-
-    @PostMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SuccessResponse<List<Medicine>>> getMedicineByImage(
+    @PostMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<SuccessResponse<Profile>> getMedicineByImage(
+            @RequestParam String email,
+            @RequestParam String name,
             @RequestPart("image") MultipartFile imageFile) {
 
         if (imageFile.isEmpty()) {
@@ -68,8 +60,8 @@ public class MedicineController {
             throw new IllegalArgumentException("File is missing");
         }
 
-        // 파일 저장 경로 지정 (예: 서버의 "uploads" 디렉토리)
-        String uploadDir = "/opt/uploads/";
+        // 파일 저장 경로 지정 (서버의 "profile" 디렉토리)
+        String uploadDir = "/opt/profile/";
         String originalFilename = imageFile.getOriginalFilename();
         if (originalFilename == null || originalFilename.contains("..")) {
             logger.error("Error: Invalid file name {}", originalFilename);
@@ -97,20 +89,15 @@ public class MedicineController {
             imageFile.transferTo(destinationFile);
             logger.info("File saved successfully: {}", filePath);
 
-            // 저장된 파일의 경로를 기반으로 Medicine 정보를 가져오는 서비스 호출
-            logger.info("Calling medicine service with file: {}", filePath);
-            SuccessResponse<List<Medicine>> response = this.medicineService.getMedicineByImage(filePath);
-            logger.info("Medicine service returned successfully.");
+            ProfileDto profileDto = new ProfileDto();
+            profileDto.setEmail(email);
+            profileDto.setName(name);
+            profileDto.setImage(filePath);
 
-            // 파일 삭제
-            logger.info("Deleting file: {}", filePath);
-            boolean isDeleted = destinationFile.delete();
-            if (!isDeleted) {
-                logger.error("Failed to delete file {}", originalFilename);
-                throw new RuntimeException("Failed to delete file " + originalFilename);
-            } else {
-                logger.info("File deleted successfully: {}", filePath);
-            }
+            // 저장된 파일의 경로를 저장하는 profile 서비스 호출
+            logger.info("Calling medicine service with file: {}", filePath);
+            SuccessResponse<Profile> response = this.profileService.editProfile(profileDto);
+            logger.info("profile service returned successfully.");
 
             // 응답 생성
             HttpHeaders headers = new HttpHeaders();
@@ -127,4 +114,20 @@ public class MedicineController {
         }
     }
 
+    @DeleteMapping(value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<SuccessResponse<String>> deleteUser(
+            @RequestParam(required = true) String email){
+
+        SuccessResponse<String> response;
+
+        boolean isDelete = profileService.deleteProfile(email);
+        if(isDelete)
+            response = new SuccessResponse<>(true,"delete Complete");
+        else
+            response = new SuccessResponse<>(false,"delete failed");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
+    }
 }
