@@ -3,6 +3,7 @@ package com.dd.server.jwt;
 import com.dd.server.domain.RefreshEntity;
 import com.dd.server.dto.CustomUserDetails;
 import com.dd.server.repository.RefreshRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,9 +16,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Map;
+
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -28,6 +32,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final RefreshRepository refreshRepository;
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshRepository refreshRepository){
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
@@ -36,14 +42,20 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String username = obtainUsername(request);
-        String password = obtainPassword(request);
+        try {
+            Map<String, String> credentials = objectMapper.readValue(request.getInputStream(), Map.class);
+            String username = credentials.get("username");
+            String password = credentials.get("password");
 
-        System.out.println(username);
+            System.out.println(username);
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
 
-        return authenticationManager.authenticate(authToken);
+            return authenticationManager.authenticate(authToken);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //로그인 성공시 실행하는 메소드 (여기서 JWT를 발급하면 됨)

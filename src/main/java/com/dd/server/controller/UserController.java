@@ -35,7 +35,7 @@ public class UserController {
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/change", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse<User>> editUser(UserDto userDto){
 
         SuccessResponse<User> response;
@@ -58,8 +58,8 @@ public class UserController {
 
         SuccessResponse<String> response;
 
-        User user = userService.deleteUser(email);
-        if(user == null)
+        boolean isDelete = userService.deleteUser(email);
+        if(isDelete)
             response = new SuccessResponse<>(true,"delete Complete");
         else
             response = new SuccessResponse<>(false,"delete failed");

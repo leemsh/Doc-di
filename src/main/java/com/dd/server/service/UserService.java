@@ -46,9 +46,10 @@ public class UserService {
         return userRepository.findByEmail(user.getEmail());
     }
 
-    public User deleteUser(String email){
+    public boolean deleteUser(String email){
         userRepository.deleteByEmail(email);
-        return userRepository.findByEmail(email);
+        if(userRepository.findByEmail(email) == null) return true;
+        return false;
     }
 
 }

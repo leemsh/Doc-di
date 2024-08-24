@@ -64,7 +64,24 @@ public class SecurityConfig {
         // 인가 설정
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/", "/join", "/medicine/find", "/medicine/info", "/medicine/image","/reissue").permitAll()
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/join").permitAll()
+                        .requestMatchers("/reissue").permitAll()
+
+                        .requestMatchers("/profile/edit").permitAll()
+                        .requestMatchers("/profile/delete").permitAll()
+                        .requestMatchers("/profile/find").permitAll()
+
+                        .requestMatchers("/medicine/info").permitAll()
+                        .requestMatchers("/medicine/image").permitAll()
+                        .requestMatchers("/medicine/find").permitAll()
+
+                        //임시 허용
+                        .requestMatchers("/user/find").permitAll()
+                        .requestMatchers("/user/edit").permitAll()
+                        .requestMatchers("/user/delete").permitAll()
+
                         .anyRequest().authenticated());
 
         // JwtFilter 등록
