@@ -60,16 +60,20 @@ public class MedicineService {
         }
 
         // MySQL DB에서 찾아오기
-        List<Medicine> medicines = medicineRepository.findByChartMedicine(name, color1, color2, shape, txt1, txt2);
-
+        List<Medicine> medicines;
+        try {
+            medicines = medicineRepository.findByChartMedicine(name, color1, color2, shape, txt1, txt2);
+        } catch (Exception e) {
+            return new SuccessResponse("DB error", 500);
+        }
         if (!medicines.isEmpty()) {
             logger.info("Found medicine(s) in database: {}", medicines);
         } else {
             logger.warn("No medicine found in database for given criteria");
-            return new SuccessResponse(false, "No data received from API or response body is null");
+            return new SuccessResponse("No data received from API or response body is null", 204);
         }
 
-        return new SuccessResponse<>(true, medicines);
+        return new SuccessResponse<>(medicines, 200);
     }
 
 
@@ -79,9 +83,9 @@ public class MedicineService {
         MedicineInfoResponse medicineInfoResponse = medicineInfoApiController.getMedicineInfoFormApi(itemName).block();
         if(medicineInfoResponse.getBody()!=null){
             MedicineInfoDto medicineInfoDto = MedicineConverter.infoToDto(medicineInfoResponse.getBody().getItems().get(0));
-            return new SuccessResponse<>(true, medicineInfoDto);
+            return new SuccessResponse<>(medicineInfoDto, 200);
         }
-        return new SuccessResponse(false, "No data received from API or response body is null");
+        return new SuccessResponse("No data received from API or response body is null", 204);
 
     }
 
