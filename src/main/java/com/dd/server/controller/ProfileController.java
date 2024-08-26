@@ -6,6 +6,8 @@ import com.dd.server.domain.User;
 import com.dd.server.dto.ProfileDto;
 import com.dd.server.dto.SuccessResponse;
 import com.dd.server.dto.UserDto;
+import com.dd.server.repository.ProfileRepository;
+import com.dd.server.service.MedicineService;
 import com.dd.server.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -31,6 +33,7 @@ import java.util.List;
 public class ProfileController {
 
     private final ProfileService profileService;
+    private final ProfileRepository profileRepository;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
@@ -60,8 +63,22 @@ public class ProfileController {
             throw new IllegalArgumentException("File is missing");
         }
 
+        Profile existedProfile = profileRepository.findByEmail(email);
+        // 원래 있던 파일 삭제
+        logger.info("Deleting file: {}", existedProfile.getImage());
+
+        File file = new File(existedProfile.getImage());
+        boolean isDeleted = file.delete();
+        if (!isDeleted) {
+            logger.error("Failed to delete file {}", existedProfile.getImage());
+            throw new RuntimeException("Failed to delete file " + existedProfile.getImage());
+        } else {
+            logger.info("File deleted successfully: {}", existedProfile.getImage());
+        }
+
+
         // 파일 저장 경로 지정 (서버의 "profile" 디렉토리)
-        String uploadDir = "/opt/profile/";
+        String uploadDir = "c:/users/leems/opt/profile/";
         String originalFilename = imageFile.getOriginalFilename();
         if (originalFilename == null || originalFilename.contains("..")) {
             logger.error("Error: Invalid file name {}", originalFilename);
@@ -95,7 +112,7 @@ public class ProfileController {
             profileDto.setImage(filePath);
 
             // 저장된 파일의 경로를 저장하는 profile 서비스 호출
-            logger.info("Calling medicine service with file: {}", filePath);
+            logger.info("Calling profile service with file: {}", filePath);
             SuccessResponse<Profile> response = this.profileService.editProfile(profileDto);
             logger.info("profile service returned successfully.");
 
