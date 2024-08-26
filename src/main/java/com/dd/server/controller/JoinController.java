@@ -3,6 +3,9 @@ package com.dd.server.controller;
 import com.dd.server.dto.JoinDto;
 import com.dd.server.dto.SuccessResponse;
 import com.dd.server.service.JoinService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,8 +22,10 @@ public class JoinController {
         this.joinService = joinService;
     }
     @PostMapping("/join")
-    public SuccessResponse<JoinDto> joinProcess(@RequestBody JoinDto joinDto){
-        boolean result = joinService.joinProcess(joinDto);
-        return new SuccessResponse<>(result, joinDto);
+    public ResponseEntity<SuccessResponse<JoinDto>> joinProcess(@RequestBody JoinDto joinDto){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        SuccessResponse<JoinDto> response = joinService.joinProcess(joinDto);
+        return new ResponseEntity<>(response, headers, response.getStatus());
     }
 }

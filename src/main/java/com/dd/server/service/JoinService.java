@@ -5,6 +5,7 @@ import com.dd.server.converter.UserJoinConverter;
 import com.dd.server.domain.Profile;
 import com.dd.server.domain.User;
 import com.dd.server.dto.JoinDto;
+import com.dd.server.dto.SuccessResponse;
 import com.dd.server.repository.ProfileRepository;
 import com.dd.server.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -19,20 +20,27 @@ public class JoinService {
         this.profileRepository = profileRepository;
     }
 
-    public boolean joinProcess(JoinDto joinDto){
+    public SuccessResponse<JoinDto> joinProcess(JoinDto joinDto){
 
         Boolean isExist = userRepository.existsByEmail(joinDto.getEmail());
 
-        if(isExist){ // 회원정보가 이미 있음
-            return false;
+        if(isExist){
+            return new SuccessResponse("Already exist email : "+joinDto.getEmail(), 409); // 회원정보가 이미 있음
+        }
+
+        isExist = userRepository.existsByPhoneNum(joinDto.getPhoneNum());
+        if(isExist){
+            return new SuccessResponse("Already exist phoneNum : "+joinDto.getPhoneNum(), 409); // 회원정보가 이미 있음
         }
 
         User user = UserJoinConverter.toEntity(joinDto);
         Profile profile = ProfileConverter.JoinDtoToProfile(joinDto);
-
-        userRepository.save(user);
-        profileRepository.save(profile);
-
-        return true;
+        try{
+            userRepository.save(user);
+            profileRepository.save(profile);
+        } catch (Exception e){
+            return new SuccessResponse("fail to save in DB", 500); //db 저장 실패
+        }
+        return new SuccessResponse<>(joinDto, 201); //회원가입 성공
     }
 }

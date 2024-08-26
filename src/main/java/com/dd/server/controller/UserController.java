@@ -25,14 +25,14 @@ public class UserController {
         User user = userService.getUser(email);
         SuccessResponse<User> response;
         if(user != null)
-            response = new SuccessResponse<>(true, user);
+            response = new SuccessResponse<>(user, 200);
         else
-            response = new SuccessResponse<>(false, null);
+            response = new SuccessResponse<>(null, 500);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        return new ResponseEntity<>(response, headers, HttpStatus.OK);
+        return new ResponseEntity<>(response, headers, response.getStatus());
     }
 
     @PutMapping(value = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,14 +41,14 @@ public class UserController {
         SuccessResponse<User> response;
 
         User user = userService.editUser(userDto);
-        if(user != null)
-            response = new SuccessResponse<>(true,user);
+        if(user == null)
+            response = new SuccessResponse<>(null, 500);
         else
-            response = new SuccessResponse<>(false,user);
+            response = new SuccessResponse<>(user, 200);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        return new ResponseEntity<>(response, headers, HttpStatus.OK);
+        return new ResponseEntity<>(response, headers, response.getStatus());
     }
 
 
@@ -60,12 +60,12 @@ public class UserController {
 
         boolean isDelete = userService.deleteUser(email);
         if(isDelete)
-            response = new SuccessResponse<>(true,"delete Complete");
+            response = new SuccessResponse<>("delete Complete", 200);
         else
-            response = new SuccessResponse<>(false,"delete failed");
+            response = new SuccessResponse<>("delete failed", 500);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        return new ResponseEntity<>(response, headers, HttpStatus.OK);
+        return new ResponseEntity<>(response, headers, response.getStatus());
     }
 }

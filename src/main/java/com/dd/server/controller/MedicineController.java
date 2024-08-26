@@ -1,6 +1,7 @@
 package com.dd.server.controller;
 
 import com.dd.server.domain.Medicine;
+import com.dd.server.domain.Profile;
 import com.dd.server.dto.FindByMedicineChartDto;
 import com.dd.server.dto.MedicineInfoDto;
 import com.dd.server.dto.SuccessResponse;
@@ -41,7 +42,7 @@ public class MedicineController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        return new ResponseEntity<>(response, headers, HttpStatus.OK);
+        return new ResponseEntity<>(response, headers, response.getStatus());
     }
 
 
@@ -53,7 +54,7 @@ public class MedicineController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        return new ResponseEntity<>(response, headers, HttpStatus.OK);
+        return new ResponseEntity<>(response, headers, response.getStatus());
     }
 
 
@@ -65,7 +66,10 @@ public class MedicineController {
 
         if (imageFile.isEmpty()) {
             logger.error("Error: File is missing");
-            throw new IllegalArgumentException("File is missing");
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            SuccessResponse response = new SuccessResponse("Error: File is missing", 400);
+            return new ResponseEntity<> (response, headers, response.getStatus());
         }
 
         // 파일 저장 경로 지정 (예: 서버의 "uploads" 디렉토리)
@@ -73,7 +77,10 @@ public class MedicineController {
         String originalFilename = imageFile.getOriginalFilename();
         if (originalFilename == null || originalFilename.contains("..")) {
             logger.error("Error: Invalid file name {}", originalFilename);
-            throw new IllegalArgumentException("Invalid file name");
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            SuccessResponse response = new SuccessResponse("Error: Invalid file name", 400);
+            return new ResponseEntity<> (response, headers, response.getStatus());
         }
         String filePath = uploadDir + originalFilename;
 
@@ -107,7 +114,8 @@ public class MedicineController {
             boolean isDeleted = destinationFile.delete();
             if (!isDeleted) {
                 logger.error("Failed to delete file {}", originalFilename);
-                throw new RuntimeException("Failed to delete file " + originalFilename);
+                response.setStatus(500);
+                response.setMessage("Failed to delete file " + originalFilename);
             } else {
                 logger.info("File deleted successfully: {}", filePath);
             }
@@ -116,14 +124,19 @@ public class MedicineController {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            return new ResponseEntity<>(response, headers, HttpStatus.OK);
+            return new ResponseEntity<>(response, headers, response.getStatus());
 
         } catch (IOException e) {
-            logger.error("IOException occurred while processing file {}", originalFilename, e);
-            throw new RuntimeException("Failed to store file " + originalFilename, e);
+            logger.error("IOException occurred while processing file {}", originalFilename, e);HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            SuccessResponse response = new SuccessResponse("IOException occurred while processing file", 500);
+            return new ResponseEntity<> (response, headers, response.getStatus());
         } catch (Exception e) {
             logger.error("An unexpected error occurred while processing file {}", originalFilename, e);
-            throw new RuntimeException("An unexpected error occurred", e);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            SuccessResponse response = new SuccessResponse("An unexpected error occurred while processing file", 500);
+            return new ResponseEntity<> (response, headers, response.getStatus());
         }
     }
 

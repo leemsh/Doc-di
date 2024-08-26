@@ -39,17 +39,12 @@ public class ProfileController {
 
     @GetMapping(value = "/find", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse<Profile>> getProfile(@RequestParam String email) {
-        Profile profile = profileService.getProfile(email);
-        SuccessResponse<Profile> response;
-        if(profile != null)
-            response = new SuccessResponse<>(true, profile);
-        else
-            response = new SuccessResponse<>(false, null);
+        SuccessResponse<Profile> response = profileService.getProfile(email);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        return new ResponseEntity<>(response, headers, HttpStatus.OK);
+        return new ResponseEntity<>(response, headers, response.getStatus());
     }
 
     @PostMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -60,7 +55,10 @@ public class ProfileController {
 
         if (imageFile.isEmpty()) {
             logger.error("Error: File is missing");
-            throw new IllegalArgumentException("File is missing");
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            SuccessResponse<Profile> response = new SuccessResponse("Error: File is missing", 400);
+            return new ResponseEntity<> (response, headers, response.getStatus());
         }
 
         Profile existedProfile = profileRepository.findByEmail(email);
@@ -71,7 +69,11 @@ public class ProfileController {
         boolean isDeleted = file.delete();
         if (!isDeleted) {
             logger.error("Failed to delete file {}", existedProfile.getImage());
-            throw new RuntimeException("Failed to delete file " + existedProfile.getImage());
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            SuccessResponse<Profile> response = new SuccessResponse("Failed to delete existing file" + existedProfile.getImage(), 500);
+            return new ResponseEntity<> (response, headers, response.getStatus());
         } else {
             logger.info("File deleted successfully: {}", existedProfile.getImage());
         }
@@ -82,7 +84,10 @@ public class ProfileController {
         String originalFilename = imageFile.getOriginalFilename();
         if (originalFilename == null || originalFilename.contains("..")) {
             logger.error("Error: Invalid file name {}", originalFilename);
-            throw new IllegalArgumentException("Invalid file name");
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            SuccessResponse<Profile> response = new SuccessResponse("Error: Invalid file name" + originalFilename, 400);
+            return new ResponseEntity<> (response, headers, response.getStatus());
         }
         String filePath = uploadDir + originalFilename;
 
@@ -93,11 +98,11 @@ public class ProfileController {
             // 업로드 디렉토리 생성 (존재하지 않을 경우)
             Path uploadPath = Paths.get(uploadDir);
             if (!Files.exists(uploadPath)) {
-                logger.info("Directory does not exist. Creating directory: {}", uploadPath.toString());
+                logger.info("Directory does not exist. Creating directory: {}", uploadPath);
                 Files.createDirectories(uploadPath);
                 logger.info("Directory created successfully.");
             } else {
-                logger.info("Directory already exists: {}", uploadPath.toString());
+                logger.info("Directory already exists: {}", uploadPath);
             }
 
             // 파일 저장
@@ -120,14 +125,20 @@ public class ProfileController {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            return new ResponseEntity<>(response, headers, HttpStatus.OK);
+            return new ResponseEntity<>(response, headers, response.getStatus());
 
         } catch (IOException e) {
             logger.error("IOException occurred while processing file {}", originalFilename, e);
-            throw new RuntimeException("Failed to store file " + originalFilename, e);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            SuccessResponse<Profile> response = new SuccessResponse("IOException occurred while processing file " +  originalFilename, 500);
+            return new ResponseEntity<> (response, headers, response.getStatus());
         } catch (Exception e) {
             logger.error("An unexpected error occurred while processing file {}", originalFilename, e);
-            throw new RuntimeException("An unexpected error occurred", e);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            SuccessResponse<Profile> response = new SuccessResponse("An unexpected error occurred while processing file " + originalFilename, 500);
+            return new ResponseEntity<> (response, headers, response.getStatus());
         }
     }
 
@@ -135,16 +146,9 @@ public class ProfileController {
     public ResponseEntity<SuccessResponse<String>> deleteUser(
             @RequestParam(required = true) String email){
 
-        SuccessResponse<String> response;
-
-        boolean isDelete = profileService.deleteProfile(email);
-        if(isDelete)
-            response = new SuccessResponse<>(true,"delete Complete");
-        else
-            response = new SuccessResponse<>(false,"delete failed");
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        return new ResponseEntity<>(response, headers, HttpStatus.OK);
+        SuccessResponse<String> response = profileService.deleteProfile(email);
+        return new ResponseEntity<>(response, headers, response.getStatus());
     }
 }

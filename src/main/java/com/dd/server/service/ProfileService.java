@@ -20,9 +20,15 @@ public class ProfileService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
-    public Profile getProfile(String email){
+    public SuccessResponse<Profile> getProfile(String email){
         logger.info("Received request with parameters: email={}", email);
-        return profileRepository.findByEmail(email);
+        Profile data;
+        try {
+            data = profileRepository.findByEmail(email);
+        }catch(Exception e){
+            return new SuccessResponse<>(null, 500);
+        }
+        return new SuccessResponse<>(data, 200);
     }
 
     public SuccessResponse<Profile> editProfile(ProfileDto profileDto){
@@ -40,14 +46,18 @@ public class ProfileService {
         profile.setId(profile.getId());
         profile.setImage(profileDto.getImage());
 
-        profileRepository.save(profile);
+        try{
+            profileRepository.save(profile);
+        }catch(Exception e){
+            return new SuccessResponse<>(null, 500);
+        }
 
         Profile newProfile = profileRepository.findByEmail(profileDto.getEmail());
-        if(newProfile.getImage() == profileDto.getImage()) return new SuccessResponse<Profile>(true, newProfile);
-        else return new SuccessResponse<>(false, null);
+        if(newProfile.getImage() == profileDto.getImage()) return new SuccessResponse<>(newProfile, 500);
+        else return new SuccessResponse<>(null, 500);
     }
 
-    public boolean deleteProfile(String email){
+    public SuccessResponse<String> deleteProfile(String email){
         logger.info("Received request with parameters: email={}", email);
 
         Profile profile = profileRepository.findByEmail(email);
@@ -58,13 +68,13 @@ public class ProfileService {
         boolean isDeleted = file.delete();
         if (!isDeleted) {
             logger.error("Failed to delete file {}", profile.getImage());
-            throw new RuntimeException("Failed to delete file " + profile.getImage());
+            return new SuccessResponse<>("Failed to delete file "+profile.getImage(), 500);
         } else {
             logger.info("File deleted successfully: {}", profile.getImage());
         }
 
         profileRepository.deleteByEmail(email);
-        if(profileRepository.findByEmail(email) == null) return true;
-        else return false;
+        if(profileRepository.findByEmail(email) == null) return new SuccessResponse<>("Success to delete file "+profile.getImage(), 200);
+        else return new SuccessResponse<>("Failed to delete file "+profile.getImage(), 500);
     }
 }
