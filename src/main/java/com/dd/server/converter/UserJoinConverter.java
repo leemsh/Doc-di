@@ -9,7 +9,6 @@ public class UserJoinConverter {
     public static User toEntity(JoinDto joinDto) {
         User user = new User();
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        user.setId(joinDto.getId());
         user.setEmail(joinDto.getEmail());
         user.setPassword(bCryptPasswordEncoder.encode(joinDto.getPassword()));
         user.setName(joinDto.getName());

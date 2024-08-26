@@ -33,6 +33,8 @@ public class ProfileService {
             throw new IllegalArgumentException("User not found with email: " + profileDto.getEmail());
         }
 
+
+
         profile.setEmail(profileDto.getEmail());
         profile.setName(profileDto.getName());
         profile.setId(profile.getId());
