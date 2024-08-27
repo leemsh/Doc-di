@@ -62,22 +62,23 @@ public class ProfileController {
         }
 
         Profile existedProfile = profileRepository.findByEmail(email);
-        // 원래 있던 파일 삭제
-        logger.info("Deleting file: {}", existedProfile.getImage());
+        if(existedProfile.getImage()!=null){
+            // 원래 있던 파일 삭제
+            logger.info("Deleting file: {}", existedProfile.getImage());
 
-        File file = new File(existedProfile.getImage());
-        boolean isDeleted = file.delete();
-        if (!isDeleted) {
-            logger.error("Failed to delete file {}", existedProfile.getImage());
+            File file = new File(existedProfile.getImage());
+            boolean isDeleted = file.delete();
+            if (!isDeleted) {
+                logger.error("Failed to delete file {}", existedProfile.getImage());
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            SuccessResponse<Profile> response = new SuccessResponse("Failed to delete existing file" + existedProfile.getImage(), 500);
-            return new ResponseEntity<> (response, headers, response.getStatus());
-        } else {
-            logger.info("File deleted successfully: {}", existedProfile.getImage());
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                SuccessResponse<Profile> response = new SuccessResponse("Failed to delete existing file" + existedProfile.getImage(), 500);
+                return new ResponseEntity<> (response, headers, response.getStatus());
+            } else {
+                logger.info("File deleted successfully: {}", existedProfile.getImage());
+            }
         }
-
 
         // 파일 저장 경로 지정 (서버의 "profile" 디렉토리)
         String uploadDir = "uploads/profile/";
