@@ -24,26 +24,4 @@ public class User {
 
     @Column(nullable = false)
     private String name;
-
-    @Column(nullable = false)
-    private String sex;
-
-    @Column(nullable = false)
-    private String birthday;
-
-    @Column(nullable = false)
-    private short height;
-
-    @Column(nullable = false)
-    private short weight;
-
-    @Column(nullable = false, name = "blood_type")
-    private String bloodType;
-
-    @Column(nullable = false, unique = true, name = "phone_num")
-    private String phoneNum;
-
-    @Column(nullable = false)
-    private String role;
-
 }

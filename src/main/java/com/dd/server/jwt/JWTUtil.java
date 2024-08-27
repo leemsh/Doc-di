@@ -41,7 +41,6 @@ public class JWTUtil {
         return Jwts.builder()
                 .claim("category", category)
                 .claim("username", username)
-                .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))
                 .signWith(secretKey)
