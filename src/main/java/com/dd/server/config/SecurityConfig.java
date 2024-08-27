@@ -82,6 +82,9 @@ public class SecurityConfig {
                         .requestMatchers("/user/edit").permitAll()
                         .requestMatchers("/user/delete").permitAll()
 
+                        .requestMatchers("statistic/find").permitAll()
+                        .requestMatchers("statistic/create").permitAll()
+
                         .anyRequest().authenticated());
 
         // JwtFilter 등록

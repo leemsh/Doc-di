@@ -3,6 +3,7 @@ package com.dd.server.service;
 import com.dd.server.domain.User;
 import com.dd.server.dto.SuccessResponse;
 import com.dd.server.dto.UserDto;
+import com.dd.server.repository.ProfileRepository;
 import com.dd.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private  final UserRepository userRepository;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final ProfileRepository profileRepository;
 
     public User getUser(String email){
 
@@ -48,6 +50,7 @@ public class UserService {
 
     public boolean deleteUser(String email){
         userRepository.deleteByEmail(email);
+        profileRepository.deleteByEmail(email);
         if(userRepository.findByEmail(email) == null) return true;
         return false;
     }
