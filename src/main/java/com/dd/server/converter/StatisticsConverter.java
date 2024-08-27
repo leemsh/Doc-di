@@ -9,6 +9,7 @@ public class StatisticsConverter {
         statistics.setName(statisticsDto.getName());
         statistics.setEmail(statisticsDto.getEmail());
         statistics.setStatistic(statisticsDto.getStatistic());
+        statistics.setDate(statisticsDto.getDate());
         statistics.setMedicineName(statisticsDto.getMedicineName());
         return statistics;
     }
