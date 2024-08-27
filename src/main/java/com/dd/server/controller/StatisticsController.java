@@ -19,8 +19,8 @@ public class StatisticsController {
     private  final StatisticsService statisticsService;
 
     @GetMapping(value = "/find", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SuccessResponse<List<Statistics>>> getStatistics(@RequestParam(required = true) String email){
-        SuccessResponse<List<Statistics>> response = statisticsService.getStatistics(email);
+    public ResponseEntity<SuccessResponse<List<Statistics>>> getStatistics(@RequestParam(required = true) String medicineName){
+        SuccessResponse<List<Statistics>> response = statisticsService.getStatistics(medicineName);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(response, headers, response.getStatus());

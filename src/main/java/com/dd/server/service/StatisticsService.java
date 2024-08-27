@@ -18,10 +18,10 @@ public class StatisticsService {
     private final StatisticRepository statisticRepository;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public SuccessResponse<List<Statistics>> getStatistics(String email){
+    public SuccessResponse<List<Statistics>> getStatistics(String medicineName){
         List<Statistics> data;
         try {
-            data = statisticRepository.findByMedicineName(email);
+            data = statisticRepository.findByMedicineName(medicineName);
         }catch (Exception e){
             logger.error(e.getMessage());
             return new SuccessResponse("interner server error", 500);
