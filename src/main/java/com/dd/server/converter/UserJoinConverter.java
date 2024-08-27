@@ -12,13 +12,6 @@ public class UserJoinConverter {
         user.setEmail(joinDto.getEmail());
         user.setPassword(bCryptPasswordEncoder.encode(joinDto.getPassword()));
         user.setName(joinDto.getName());
-        user.setSex(joinDto.getSex());
-        user.setBirthday(joinDto.getBirthday());
-        user.setHeight(joinDto.getHeight());
-        user.setWeight(joinDto.getWeight());
-        user.setBloodType(joinDto.getBloodType());
-        user.setPhoneNum(joinDto.getPhoneNum());
-        user.setRole("ROLE_ADMIN");
         return user;
     }
 }

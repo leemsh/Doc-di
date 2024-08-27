@@ -28,11 +28,6 @@ public class JoinService {
             return new SuccessResponse("Already exist email : "+joinDto.getEmail(), 409); // 회원정보가 이미 있음
         }
 
-        isExist = userRepository.existsByPhoneNum(joinDto.getPhoneNum());
-        if(isExist){
-            return new SuccessResponse("Already exist phoneNum : "+joinDto.getPhoneNum(), 409); // 회원정보가 이미 있음
-        }
-
         User user = UserJoinConverter.toEntity(joinDto);
         Profile profile = ProfileConverter.JoinDtoToProfile(joinDto);
         try{

@@ -80,7 +80,7 @@ public class ProfileController {
 
 
         // 파일 저장 경로 지정 (서버의 "profile" 디렉토리)
-        String uploadDir = "c:/users/leems/opt/profile/";
+        String uploadDir = "uploads/profile/";
         String originalFilename = imageFile.getOriginalFilename();
         if (originalFilename == null || originalFilename.contains("..")) {
             logger.error("Error: Invalid file name {}", originalFilename);
