@@ -3,8 +3,6 @@ package com.dd.server.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import static lombok.AccessLevel.PROTECTED;
-
 @Entity
 @Data
 @NoArgsConstructor
@@ -26,6 +24,9 @@ public class Statistics {
 
     @Column
     private String statistic;
+
+    @Column
+    private String date;
 
     @Column(nullable = false)
     private short rate;

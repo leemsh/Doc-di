@@ -11,5 +11,6 @@ public class StatisticsDto {
     private String name;
     private String medicineName;
     private String statistic;
+    private String date;
     private short rate;
 }
