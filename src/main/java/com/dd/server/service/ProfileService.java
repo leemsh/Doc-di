@@ -31,24 +31,25 @@ public class ProfileService {
         return new SuccessResponse<>(data, 200);
     }
 
-    public SuccessResponse<Profile> editProfile(String email, String uploadPath){
+    public SuccessResponse<Profile> editProfile(String email, String uploadPath) {
         Profile profile = profileRepository.findByEmail(email);
 
-        if (profile == null){
-            logger.error("User not found");
-            throw new IllegalArgumentException("User not found with email: " + email);
+        if (profile == null) {
+            logger.error("User not found with email: {}", email);
+            return new SuccessResponse<>(null, 404); // 404 Not Found
         }
+
         profile.setImage(uploadPath);
 
-        try{
+        try {
             profileRepository.save(profile);
-        }catch(Exception e){
-            return new SuccessResponse<>(null, 500);
+            logger.info("Updated profile image path: image={}, email={}", uploadPath, email);
+        } catch (Exception e) {
+            logger.error("Failed to update profile image path: email={}, error={}", email, e.getMessage());
+            return new SuccessResponse<>(null, 500); // 500 Internal Server Error
         }
 
-        Profile newProfile = profileRepository.findByEmail(email);
-        if(newProfile.getImage() == uploadPath) return new SuccessResponse<>(newProfile, 500);
-        else return new SuccessResponse<>(null, 500);
+        return new SuccessResponse<>(profile, 200); // 200 OK
     }
 
     public SuccessResponse<String> deleteProfile(String email){

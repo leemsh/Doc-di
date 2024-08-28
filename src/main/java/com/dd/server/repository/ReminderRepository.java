@@ -8,4 +8,7 @@ import java.util.List;
 
 public interface ReminderRepository extends JpaRepository<Reminder, String> {
     List<Reminder> findByEmail(String email);
+    Reminder findById(int id);
+    void deleteById(int id);
+    void deleteByEmail(String email);
 }

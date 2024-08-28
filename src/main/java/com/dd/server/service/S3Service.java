@@ -31,13 +31,13 @@ public class S3Service{
     //파라미터 파일이름, 파일, 확장자, 디렉토리네임
     public String upload(String fileName, MultipartFile multipartFile, String extend, String dirName) throws IOException { // dirName의 디렉토리가 S3 Bucket 내부에 생성됨
 
-        File uploadFile = convert(multipartFile)
-                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
+        File uploadFile = convertToFile(multipartFile);
+                //.orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
         return upload(fileName, uploadFile, extend, dirName);
     }
 
     private String upload(String fileName,File uploadFile, String extend, String dirName) {
-        String newFileName = dirName + "/" + fileName+extend;
+        String newFileName = dirName + "/" + fileName+'.'+extend;
         String uploadImageUrl = putS3(uploadFile, newFileName);
 
         removeNewFile(uploadFile);  // convert()함수로 인해서 로컬에 생성된 File 삭제 (MultipartFile -> File 전환 하며 로컬에 파일 생성됨)
@@ -71,6 +71,12 @@ public class S3Service{
             return Optional.of(convertFile);
         }
         return Optional.empty();
+    }
+
+    private File convertToFile(MultipartFile multipartFile) throws IOException {
+        File file = new File(System.getProperty("java.io.tmpdir") + "/" + multipartFile.getOriginalFilename());
+        multipartFile.transferTo(file);
+        return file;
     }
 
     public ResponseEntity<byte[]> download(String fullFilePath) {

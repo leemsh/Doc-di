@@ -51,34 +51,47 @@ public class ProfileController {
     @PostMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse<Profile>> getMedicineByImage(
             @RequestParam String email,
+            @RequestParam String fileName,
             @RequestPart("image") MultipartFile imageFile) {
-
 
         Profile existedProfile = profileRepository.findByEmail(email);
         // 원래 있던 파일 삭제
-        logger.info("Deleting file: {}", existedProfile.getImage());
-        try {
-            s3Service.delete(existedProfile.getImage());
-        }catch (Exception e){
+        if(existedProfile.getImage() != null) {
+            logger.info("Deleting file: {}", existedProfile.getImage());
+            try {
+                s3Service.delete(existedProfile.getImage());
+            }catch (Exception e){
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                SuccessResponse<Profile> response = new SuccessResponse("delete fail in S3 " + existedProfile.getImage(), 500);
+                return new ResponseEntity<> (response, headers, response.getStatus());
+            }
+        }
+
+        if(imageFile.isEmpty()) {
+            SuccessResponse<Profile> response = this.profileService.editProfile(email, null);
+            logger.info("profile service returned successfully.");
+            // 응답 생성
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            SuccessResponse<Profile> response = new SuccessResponse("delete fail in S3 " + existedProfile.getImage(), 500);
-            return new ResponseEntity<> (response, headers, response.getStatus());
+            return new ResponseEntity<>(response, headers, response.getStatus());
         }
+
         // 파일 저장 경로 지정 (서버의 "profile" 디렉토리)
         String uploadDir = "profile";
+        String filePath = uploadDir + '/' + fileName + ".jpg";
         String originalFilename = imageFile.getOriginalFilename();
-        String filePath = uploadDir + '/' + originalFilename;
+
         logger.info("File path: {}", filePath);
 
         try {
             // 파일 저장
-            String uploadPath = s3Service.upload(imageFile.getName(), imageFile, "jpg", uploadDir);
+            s3Service.upload(fileName, imageFile, "jpg", uploadDir);
 
 
             // 저장된 파일의 경로를 저장하는 profile 서비스 호출
             logger.info("Calling profile service with file: {}", filePath);
-            SuccessResponse<Profile> response = this.profileService.editProfile(email, uploadPath);
+            SuccessResponse<Profile> response = this.profileService.editProfile(email, filePath);
             logger.info("profile service returned successfully.");
 
             // 응답 생성
