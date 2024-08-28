@@ -36,19 +36,19 @@ public class ReminderController {
         return new ResponseEntity<>(response, headers, response.getStatus());
     }
 
-//    @PutMapping(value="/edit", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<SuccessResponse> putReminder(@RequestBody Reminder reminder){
-//        SuccessResponse<String> response = reminderService.updateReminder(reminder);
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_JSON);
-//        return new ResponseEntity<>(response, headers, response.getStatus());
-//    }
-//
-//    @DeleteMapping(value="/delete", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<SuccessResponse> deleteReminder(@RequestParam(required = true) int id){
-//        SuccessResponse<String> response = reminderService.deleteReminder(id);
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_JSON);
-//        return new ResponseEntity<>(response, headers, response.getStatus());
-//    }
+    @PutMapping(value="/edit", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<SuccessResponse> putReminder(@RequestBody Reminder reminder){
+        SuccessResponse<String> response = reminderService.updateReminder(reminder);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new ResponseEntity<>(response, headers, response.getStatus());
+    }
+
+    @DeleteMapping(value="/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<SuccessResponse> deleteReminder(@RequestParam(required = true) int id){
+        SuccessResponse<String> response = reminderService.deleteReminder(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new ResponseEntity<>(response, headers, response.getStatus());
+    }
 }

@@ -37,12 +37,45 @@ public class ReminderService {
             reminderRepository.save(reminder);
         }catch (Exception e){
             logger.error(e.getMessage());
-            return new SuccessResponse("DB save fail", 500);
+            return new SuccessResponse<>("DB save fail", 500);
         }
-        return new SuccessResponse("DB save success", 201);
+        return new SuccessResponse<>("DB save success", 201);
     }
 
-//    public SuccessResponse<String> updateReminder(Reminder reminder){
-//
-//    }
+    public SuccessResponse<String> updateReminder(Reminder reminder){
+        Reminder data = reminderRepository.findById(reminder.getId());
+        data.setMedicineName(reminder.getMedicineName());
+        data.setMedicineUnit(reminder.getMedicineUnit());
+        data.setOneTimeAmount(reminder.getOneTimeAmount());
+        data.setOneTimeCount(reminder.getOneTimeCount());
+        data.setEatingDays(reminder.getEatingDays());
+        data.setEatingStartDate(reminder.getEatingStartDate());
+        try {
+            reminderRepository.save(data);
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return new SuccessResponse<>("DB save fail", 500);
+        }
+        return new SuccessResponse<>("DB save success", 200);
+    }
+
+    public SuccessResponse<String> deleteReminder(int id){
+        try {
+            reminderRepository.deleteById(id);
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return new SuccessResponse<>("DB delete fail", 500);
+        }
+        return new SuccessResponse<>("DB delete success", 200);
+    }
+
+    public SuccessResponse<String> deleteReminderByEmail(String email){
+        try {
+            reminderRepository.deleteByEmail(email);
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return new SuccessResponse<>("DB delete fail", 500);
+        }
+        return new SuccessResponse<>("DB delete success", 200);
+    }
 }

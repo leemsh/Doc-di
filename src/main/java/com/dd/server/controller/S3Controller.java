@@ -17,10 +17,8 @@ public class S3Controller {
     @Autowired
     private S3Service s3Service;
 
-    @GetMapping(path = "/data/{fileName}")
-    public ResponseEntity<byte[]> getPetImage(
-            @PathVariable String fileName
-    ) throws IOException {
+    @GetMapping(path = "/data")
+    public ResponseEntity<byte[]> getImage(@RequestParam String fileName) {
         return s3Service.download(fileName);
     }
 }

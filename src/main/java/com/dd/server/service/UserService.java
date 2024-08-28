@@ -1,5 +1,6 @@
 package com.dd.server.service;
 
+import com.dd.server.controller.ProfileController;
 import com.dd.server.domain.User;
 import com.dd.server.dto.SuccessResponse;
 import com.dd.server.dto.UserDto;
@@ -15,7 +16,8 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private  final UserRepository userRepository;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final ProfileRepository profileRepository;
+    private final ProfileService profileService;
+    private final ReminderService reminderService;
 
     public User getUser(String email){
 
@@ -42,7 +44,8 @@ public class UserService {
 
     public boolean deleteUser(String email){
         userRepository.deleteByEmail(email);
-        profileRepository.deleteByEmail(email);
+        profileService.deleteProfile(email);
+        reminderService.deleteReminderByEmail(email);
         if(userRepository.findByEmail(email) == null) return true;
         return false;
     }
