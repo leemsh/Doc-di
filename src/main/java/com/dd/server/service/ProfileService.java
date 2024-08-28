@@ -31,20 +31,14 @@ public class ProfileService {
         return new SuccessResponse<>(data, 200);
     }
 
-    public SuccessResponse<Profile> editProfile(ProfileDto profileDto){
-        Profile profile = profileRepository.findByEmail(profileDto.getEmail());
+    public SuccessResponse<Profile> editProfile(String email, String uploadPath){
+        Profile profile = profileRepository.findByEmail(email);
 
         if (profile == null){
             logger.error("User not found");
-            throw new IllegalArgumentException("User not found with email: " + profileDto.getEmail());
+            throw new IllegalArgumentException("User not found with email: " + email);
         }
-
-
-
-        profile.setEmail(profileDto.getEmail());
-        profile.setName(profileDto.getName());
-        profile.setId(profile.getId());
-        profile.setImage(profileDto.getImage());
+        profile.setImage(uploadPath);
 
         try{
             profileRepository.save(profile);
@@ -52,8 +46,8 @@ public class ProfileService {
             return new SuccessResponse<>(null, 500);
         }
 
-        Profile newProfile = profileRepository.findByEmail(profileDto.getEmail());
-        if(newProfile.getImage() == profileDto.getImage()) return new SuccessResponse<>(newProfile, 500);
+        Profile newProfile = profileRepository.findByEmail(email);
+        if(newProfile.getImage() == uploadPath) return new SuccessResponse<>(newProfile, 500);
         else return new SuccessResponse<>(null, 500);
     }
 

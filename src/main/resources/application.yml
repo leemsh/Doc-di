@@ -27,3 +27,21 @@ spring:
 
   profiles:
     include: jwt
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+cloud:
+  aws:
+    s3:
+      bucket: leemsh11
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+    credentials:
+      access-key: AKIAVUVLI67PNQCH2O4M
+      secret-key: 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
