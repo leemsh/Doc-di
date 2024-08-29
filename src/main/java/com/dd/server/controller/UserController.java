@@ -1,6 +1,7 @@
 package com.dd.server.controller;
 
 import com.dd.server.domain.User;
+import com.dd.server.dto.JoinDto;
 import com.dd.server.dto.SuccessResponse;
 import com.dd.server.dto.UserDto;
 import com.dd.server.service.UserService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -23,6 +25,7 @@ public class UserController {
     public ResponseEntity<SuccessResponse<User>> getUser(
             @RequestParam(required = true) String email){
         User user = userService.getUser(email);
+        user.setPassword(null);
         SuccessResponse<User> response;
         if(user != null)
             response = new SuccessResponse<>(user, 200);
@@ -36,11 +39,15 @@ public class UserController {
     }
 
     @PutMapping(value = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SuccessResponse<User>> editUser(UserDto userDto){
+    public ResponseEntity<SuccessResponse<User>> editUser(
+            @RequestPart UserDto userDto,
+            @RequestPart MultipartFile file){
 
         SuccessResponse<User> response;
 
-        User user = userService.editUser(userDto);
+        User user = userService.editUser(userDto, file);
+        user.setPassword(null);
+
         if(user == null)
             response = new SuccessResponse<>(null, 500);
         else

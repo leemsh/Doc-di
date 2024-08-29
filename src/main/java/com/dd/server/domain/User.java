@@ -24,4 +24,7 @@ public class User {
 
     @Column(nullable = false)
     private String name;
+
+    @Column
+    private String image;
 }
