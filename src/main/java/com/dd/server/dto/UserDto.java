@@ -10,12 +10,5 @@ public class UserDto {
     private String email;
     private String password;
     private String name;
-    private String sex;
-    private String birthday;
-    private short height;
-    private short weight;
-    private String bloodType;
-    private String phoneNum;
-    private String role;
     private String image;
 }
