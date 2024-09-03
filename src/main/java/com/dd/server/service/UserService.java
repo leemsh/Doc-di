@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -52,12 +53,21 @@ public class UserService {
         return user;
     }
 
-    public boolean deleteUser(String email){
-        reminderService.deleteReminderByEmail(email);
-        userRepository.deleteByEmail(email);
-        refreshRepository.deleteByUsername(email);
-        if(userRepository.findByEmail(email) == null) return true;
-        return false;
+    @Transactional
+    public boolean deleteUser(String email) {
+        try {
+            reminderService.deleteReminderByEmail(email);
+            profileService.deleteImage(email);
+            userRepository.deleteByEmail(email);
+            refreshRepository.deleteByUsername(email);
+
+            // 사용자가 삭제되었는지 확인
+            return userRepository.findByEmail(email) == null;
+        } catch (Exception e) {
+            // 예외 발생 시 로그를 남기고 false를 반환
+            logger.error("Error deleting user with email: " + email, e);
+            return false;
+        }
     }
 
 }
