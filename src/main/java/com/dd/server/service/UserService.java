@@ -2,6 +2,7 @@ package com.dd.server.service;
 
 import com.dd.server.domain.User;
 import com.dd.server.dto.UserDto;
+import com.dd.server.repository.RefreshRepository;
 import com.dd.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ public class UserService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final ReminderService reminderService;
     private final ProfileService profileService;
+    private final RefreshRepository refreshRepository;
 
     public User getUser(String email){
 
@@ -53,6 +55,7 @@ public class UserService {
     public boolean deleteUser(String email){
         reminderService.deleteReminderByEmail(email);
         userRepository.deleteByEmail(email);
+        refreshRepository.deleteByUsername(email);
         if(userRepository.findByEmail(email) == null) return true;
         return false;
     }

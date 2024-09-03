@@ -82,8 +82,8 @@ public class SecurityConfig {
                         .requestMatchers("/user/edit").permitAll()
                         .requestMatchers("/user/delete").permitAll()
 
-                        .requestMatchers("statistic/find").permitAll()
-                        .requestMatchers("statistic/create").permitAll()
+                        .requestMatchers("/statistic/find").permitAll()
+                        .requestMatchers("/statistic/create").permitAll()
 
                         .requestMatchers("/data/{fileName}").permitAll()
                         .requestMatchers("/data").permitAll()
