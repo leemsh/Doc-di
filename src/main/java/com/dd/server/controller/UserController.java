@@ -75,4 +75,27 @@ public class UserController {
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(response, headers, response.getStatus());
     }
+
+
+    //TODO 비밀번호 재발급
+//    @PostMapping("/findpw")
+//    public ResponseEntity<SuccessResponse<String>> findPw(
+//            @RequestParam String email){
+//
+//        SuccessResponse<String> response;
+//
+//        try {
+//
+//
+//        }catch (Exception e){
+//            response = new SuccessResponse<>(null, 500);
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentType(MediaType.APPLICATION_JSON);
+//            return new ResponseEntity<>(response, headers, response.getStatus());
+//        }
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_JSON);
+//        return new ResponseEntity<>(response, headers, response.getStatus());
+//    }
 }
