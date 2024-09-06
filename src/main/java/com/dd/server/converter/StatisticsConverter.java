@@ -11,6 +11,7 @@ public class StatisticsConverter {
         statistics.setStatistic(statisticsDto.getStatistic());
         statistics.setDate(statisticsDto.getDate());
         statistics.setMedicineName(statisticsDto.getMedicineName());
+        statistics.setRate(statisticsDto.getRate());
         return statistics;
     }
 }
