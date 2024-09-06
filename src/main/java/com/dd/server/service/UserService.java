@@ -3,6 +3,7 @@ package com.dd.server.service;
 import com.dd.server.domain.User;
 import com.dd.server.dto.UserDto;
 import com.dd.server.repository.RefreshRepository;
+import com.dd.server.repository.StatisticRepository;
 import com.dd.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -20,6 +21,8 @@ public class UserService {
     private final ReminderService reminderService;
     private final ProfileService profileService;
     private final RefreshRepository refreshRepository;
+    private final StatisticRepository statisticRepository;
+    private final StatisticsService statisticsService;
 
     public User getUser(String email){
 
@@ -60,6 +63,7 @@ public class UserService {
             profileService.deleteImage(email);
             userRepository.deleteByEmail(email);
             refreshRepository.deleteByUsername(email);
+            statisticsService.deleteStatisticsByEmail(email);
 
             // 사용자가 삭제되었는지 확인
             return userRepository.findByEmail(email) == null;
