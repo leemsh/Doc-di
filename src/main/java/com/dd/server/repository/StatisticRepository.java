@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface StatisticRepository extends JpaRepository<Statistics, String> {
     List<Statistics> findByMedicineName(String medicineName);
+    Statistics findById(int id);
+    void deleteById(int id);
+    void deleteByEmail(String email);
 }

@@ -57,7 +57,7 @@ public class ReminderController {
 
     @GetMapping(value = "/booked/find", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse<List<Reminder>>> getBookedReminder(@RequestParam(required = true) String email){
-        SuccessResponse<java.util.List<Reminder>> response = reminderService.getReminder(email);
+        SuccessResponse<java.util.List<Reminder>> response = reminderService.getBookReminder(email);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(response, headers, response.getStatus());
@@ -65,7 +65,7 @@ public class ReminderController {
 
     @PostMapping(value="/booked/create", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse> createBookedReminder(@RequestBody ReminderDto reminderDto){
-        SuccessResponse<String> response = reminderService.createReminder(reminderDto);
+        SuccessResponse<String> response = reminderService.createBookReminder(reminderDto);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(response, headers, response.getStatus());
@@ -73,7 +73,7 @@ public class ReminderController {
 
     @PutMapping(value="/booked/edit", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse> putBookedReminder(@RequestBody Reminder reminder){
-        SuccessResponse<String> response = reminderService.updateReminder(reminder);
+        SuccessResponse<String> response = reminderService.updateBookReminder(reminder);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(response, headers, response.getStatus());
@@ -81,7 +81,7 @@ public class ReminderController {
 
     @DeleteMapping(value="/booked/delete", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse> deleteBookedReminder(@RequestParam(required = true) int id){
-        SuccessResponse<String> response = reminderService.deleteReminder(id);
+        SuccessResponse<String> response = reminderService.deleteBookReminder(id);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(response, headers, response.getStatus());
