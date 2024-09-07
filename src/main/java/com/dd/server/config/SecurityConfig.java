@@ -76,6 +76,7 @@ public class SecurityConfig {
                         .requestMatchers("/medicine/info").permitAll()
                         .requestMatchers("/medicine/image").permitAll()
                         .requestMatchers("/medicine/find").permitAll()
+                        .requestMatchers("/medicine/statistics").permitAll()
 
                         //임시 허용
                         .requestMatchers("/user/find").permitAll()

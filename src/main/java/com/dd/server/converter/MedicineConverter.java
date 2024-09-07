@@ -6,7 +6,6 @@ import com.dd.server.dto.FindByMedicineChartDto;
 import com.dd.server.dto.MedicineInfoDto;
 import com.dd.server.dto.MedicineInfoResponse;
 import com.dd.server.dto.MedicineResponse;
-import jakarta.persistence.Converter;
 
 public class MedicineConverter {
 
@@ -43,7 +42,8 @@ public class MedicineConverter {
         medicine.setMarkCodeBack(item.getMarkCodeBack());
         medicine.setEdiCode(item.getEdiCode());
         medicine.setBizrno(item.getBizrno());
-
+        medicine.setRateAmount(0);
+        medicine.setRateTotal(0);
         return medicine;
     }
 

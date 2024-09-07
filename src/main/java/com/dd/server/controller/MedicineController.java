@@ -1,9 +1,7 @@
 package com.dd.server.controller;
 
 import com.dd.server.domain.Medicine;
-import com.dd.server.dto.FindByMedicineChartDto;
-import com.dd.server.dto.MedicineInfoDto;
-import com.dd.server.dto.SuccessResponse;
+import com.dd.server.dto.*;
 import com.dd.server.service.MedicineService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -52,6 +50,14 @@ public class MedicineController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
+        return new ResponseEntity<>(response, headers, response.getStatus());
+    }
+
+    @PutMapping(value = "/statistics", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<SuccessResponse<Medicine>> putMedicineStatistics(@RequestBody MedicineStatisticsDto medicineStatisticsDto){
+        SuccessResponse<Medicine> response = this.medicineService.putStatistics(medicineStatisticsDto);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(response, headers, response.getStatus());
     }
 
