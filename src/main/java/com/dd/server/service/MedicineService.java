@@ -48,13 +48,13 @@ public class MedicineService {
         // medicineResponse를 MySQL DB에 저장하기 (중복 확인하기)
         if(medicineResponse.getBody()!=null){
             for (MedicineResponse.Item item : medicineResponse.getBody().getItems()) {
-                Optional<Medicine> existingMedicine = medicineRepository.findByItemName(item.getItemName());
-                if (existingMedicine.isEmpty()) {
+                Medicine existingMedicine = medicineRepository.findByItemName(item.getItemName());
+                if (existingMedicine == null) {
                     Medicine medicine = MedicineConverter.toEntity(item);
                     medicineRepository.save(medicine);
                     logger.info("Saved new medicine to database: {}", medicine.getItemName());
                 } else {
-                    logger.info("Medicine already exists in database: {}", existingMedicine.get());
+                    logger.info("Medicine already exists in database: {}", existingMedicine);
                 }
             }
         }
@@ -87,6 +87,19 @@ public class MedicineService {
         }
         return new SuccessResponse("No data received from API or response body is null", 204);
 
+    }
+
+    public SuccessResponse<Medicine> putStatistics(MedicineStatisticsDto medicineStatisticsDto){
+        Medicine medicine = medicineRepository.findByItemName(medicineStatisticsDto.getName());
+
+        medicine.setRateTotal(medicineStatisticsDto.getRateTotal());
+        medicine.setRateAmount(medicineStatisticsDto.getRateAmount());
+        try{
+            medicineRepository.save(medicine);
+        }catch (Exception e){
+            return new SuccessResponse("DB error", 500);
+        }
+        return new SuccessResponse<>(medicine, 200);
     }
 
 

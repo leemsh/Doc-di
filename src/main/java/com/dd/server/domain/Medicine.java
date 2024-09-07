@@ -1,13 +1,13 @@
 package com.dd.server.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "medicine")
-@Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class Medicine {
 
     @Id
@@ -107,4 +107,10 @@ public class Medicine {
 
     @Column(name = "bizrno")
     private String bizrno;
+
+    @Column(name = "rate_total")
+    private int rateTotal;
+
+    @Column(name = "rate_amount")
+    private int rateAmount;
 }

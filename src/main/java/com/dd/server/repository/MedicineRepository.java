@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MedicineRepository extends JpaRepository<Medicine, String> {
-    Optional<Medicine> findByItemName(String itemName);
+    Medicine findByItemName(String itemName);
 
 
     @Query("SELECT m FROM Medicine m WHERE " +
