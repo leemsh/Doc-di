@@ -20,17 +20,17 @@ public class Reminder {
     private String medicineName; //약이름
 
     @Column(nullable = false)
-    private String medicineUnit; //약 단위
+    private short dosage;
 
     @Column(nullable = false)
-    private short oneTimeAmount; //1회투여량
+    private String recurrence;
 
     @Column(nullable = false)
-    private short oneTimeCount; //1회투여횟수
+    private String endDate;
 
     @Column(nullable = false)
-    private short eatingDays; //복용기간
+    private String medicationTime;
 
     @Column(nullable = false)
-    private String eatingStartDate; //복용시작일자
+    private String medicationTaken;
 }

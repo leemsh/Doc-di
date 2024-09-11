@@ -4,6 +4,7 @@ import com.dd.server.domain.Reminder;
 import com.dd.server.dto.ReminderDto;
 import com.dd.server.dto.SuccessResponse;
 import com.dd.server.repository.ReminderRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,11 +46,11 @@ public class ReminderService {
     public SuccessResponse<String> updateReminder(Reminder reminder){
         Reminder data = reminderRepository.findById(reminder.getId());
         data.setMedicineName(reminder.getMedicineName());
-        data.setMedicineUnit(reminder.getMedicineUnit());
-        data.setOneTimeAmount(reminder.getOneTimeAmount());
-        data.setOneTimeCount(reminder.getOneTimeCount());
-        data.setEatingDays(reminder.getEatingDays());
-        data.setEatingStartDate(reminder.getEatingStartDate());
+        data.setDosage(reminder.getDosage());
+        data.setRecurrence(reminder.getRecurrence());
+        data.setEndDate(reminder.getEndDate());
+        data.setMedicationTime(reminder.getMedicationTime());
+        data.setMedicationTaken(reminder.getMedicationTaken());
         try {
             reminderRepository.save(data);
         }catch (Exception e){
@@ -59,6 +60,7 @@ public class ReminderService {
         return new SuccessResponse<>("DB save success", 200);
     }
 
+    @Transactional
     public SuccessResponse<String> deleteReminder(int id){
         try {
             reminderRepository.deleteById(id);
@@ -69,6 +71,7 @@ public class ReminderService {
         return new SuccessResponse<>("DB delete success", 200);
     }
 
+    @Transactional
     public SuccessResponse<String> deleteReminderByEmail(String email){
         try {
             reminderRepository.deleteByEmail(email);

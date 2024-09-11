@@ -88,6 +88,16 @@ public class SecurityConfig {
                         .requestMatchers("/statistic/edit").permitAll()
                         .requestMatchers("/statistic/delete").permitAll()
 
+                        .requestMatchers("/reminder/medicine/find").permitAll()
+                        .requestMatchers("/reminder/medicine/create").permitAll()
+                        .requestMatchers("/reminder/medicine/edit").permitAll()
+                        .requestMatchers("/reminder/medicine/delete").permitAll()
+
+                        .requestMatchers("/reminder/booked/find").permitAll()
+                        .requestMatchers("/reminder/booked/create").permitAll()
+                        .requestMatchers("/reminder/booked/edit").permitAll()
+                        .requestMatchers("/reminder/booked/delete").permitAll()
+
                         .requestMatchers("/data/{fileName}").permitAll()
                         .requestMatchers("/data").permitAll()
 
