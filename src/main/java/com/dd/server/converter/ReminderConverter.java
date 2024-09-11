@@ -8,11 +8,11 @@ public class ReminderConverter {
         Reminder reminder = new Reminder();
         reminder.setEmail(reminderDto.getEmail());
         reminder.setMedicineName(reminderDto.getMedicineName());
-        reminder.setMedicineUnit(reminderDto.getMedicineUnit());
-        reminder.setOneTimeAmount(reminderDto.getOneTimeAmount());
-        reminder.setOneTimeCount(reminderDto.getOneTimeCount());
-        reminder.setEatingDays(reminderDto.getEatingDays());
-        reminder.setEatingStartDate(reminderDto.getEatingStartDate());
+        reminder.setDosage(reminderDto.getDosage());
+        reminder.setRecurrence(reminderDto.getRecurrence());
+        reminder.setEndDate(reminderDto.getEndDate());
+        reminder.setMedicationTime(reminderDto.getMedicationTime());
+        reminder.setMedicationTaken(reminderDto.getMedicationTaken());
         return reminder;
     }
 }
