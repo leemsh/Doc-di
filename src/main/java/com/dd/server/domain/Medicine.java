@@ -109,8 +109,8 @@ public class Medicine {
     private String bizrno;
 
     @Column(name = "rate_total")
-    private int rateTotal;
+    private Integer rateTotal;
 
     @Column(name = "rate_amount")
-    private int rateAmount;
+    private Integer rateAmount;
 }

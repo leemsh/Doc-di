@@ -20,8 +20,9 @@ public interface MedicineRepository extends JpaRepository<Medicine, String> {
             "((:color1 IS NULL OR m.colorClass1 = :color1) AND (:color2 IS NULL OR m.colorClass2 = :color2) " +
             "OR (:color1 IS NULL OR m.colorClass2 = :color1) AND (:color2 IS NULL OR m.colorClass1 = :color2)) AND " +
             "(:shape IS NULL OR m.drugShape = :shape) AND " +
-            "(:txt1 IS NULL OR m.printFront LIKE %:txt1%) AND " +
-            "(:txt2 IS NULL OR m.printBack LIKE %:txt2%)")
+            "((:txt1 IS NULL OR m.printFront LIKE %:txt1%) AND (:txt2 IS NULL OR m.printBack LIKE %:txt2%) " +
+            "OR (:txt1 IS NULL OR m.printBack LIKE %:txt1%) AND (:txt2 IS NULL OR m.printFront LIKE %:txt2%))")
+
 
     List<Medicine> findByChartMedicine(
             @Param("name") String name,
