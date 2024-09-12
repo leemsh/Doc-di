@@ -44,9 +44,9 @@ public class MedicineController {
 
 
     @GetMapping(value = "/info", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SuccessResponse<MedicineInfoDto>> getMedicineInfo(@RequestParam String name){
+    public ResponseEntity<SuccessResponse<MedicineInfoDto>> getMedicineInfo(@RequestParam String itemSeq){
 
-        SuccessResponse<MedicineInfoDto> response = this.medicineService.getMedicineInfo(name);
+        SuccessResponse<MedicineInfoDto> response = this.medicineService.getMedicineInfo(itemSeq);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 

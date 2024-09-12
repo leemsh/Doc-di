@@ -32,12 +32,12 @@ public class MedicineInfoApiController {
         this.xmlMapper.registerModule(new JaxbAnnotationModule());
     }
 
-    public Mono<MedicineInfoResponse> getMedicineInfoFormApi(String itemName){
+    public Mono<MedicineInfoResponse> getMedicineInfoFormApi(String itemSeq){
         String encodedName = null;
 
         try{
-            if(itemName != null){
-                encodedName = URLEncoder.encode(itemName, StandardCharsets.UTF_8.toString());
+            if(itemSeq != null){
+                encodedName = URLEncoder.encode(itemSeq, StandardCharsets.UTF_8.toString());
             }
         } catch (Exception e){
             logger.error("Failed to encode parameter", e);
@@ -50,9 +50,8 @@ public class MedicineInfoApiController {
                 .path(REQUEST_PATH)
                 .queryParam("serviceKey", KEY);
 
-        if (encodedName != null) {
-            uriBuilder.queryParam("itemName", encodedName);
-        }
+        uriBuilder.queryParam("itemSeq", encodedName);
+
 
         String uri = uriBuilder.build().toUriString();
 

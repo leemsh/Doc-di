@@ -12,8 +12,10 @@ public class Medicine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id; //약 아이디
+
     @Column(name = "item_seq", nullable = false, unique = true)
-    private Long itemSeq;
+    private String itemSeq;
 
     @Column(name = "item_name")
     private String itemName;

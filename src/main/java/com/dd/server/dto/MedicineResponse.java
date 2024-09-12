@@ -55,7 +55,7 @@ public class MedicineResponse {
     //@JsonIgnoreProperties(ignoreUnknown = true)
     public static class Item {
         @JacksonXmlProperty(localName = "ITEM_SEQ")
-        private Long itemSeq;
+        private String itemSeq;
 
         @JacksonXmlProperty(localName = "ITEM_NAME")
         private String itemName;

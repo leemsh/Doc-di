@@ -55,7 +55,8 @@ public class MedicineApiController {
                 .host(REQUEST_HOST)
                 .path(REQUEST_PATH)
                 .queryParam("serviceKey", KEY)
-                .queryParam("type", TYPE);
+                .queryParam("type", TYPE)
+                .queryParam("numOfRows",100);
 
         if (encodedName != null) {
             uriBuilder.queryParam("item_name", encodedName);
