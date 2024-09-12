@@ -77,20 +77,26 @@ public class MedicineService {
     }
 
 
-    public SuccessResponse<MedicineInfoDto> getMedicineInfo(String itemName){
-        logger.info("Received request with parameters: name={}", itemName);
+    public SuccessResponse<MedicineInfoDto> getMedicineInfo(String itemSeq){
+        logger.info("Received request with parameters: name={}", itemSeq);
 
-        MedicineInfoResponse medicineInfoResponse = medicineInfoApiController.getMedicineInfoFormApi(itemName).block();
-        if(medicineInfoResponse.getBody()!=null){
-            MedicineInfoDto medicineInfoDto = MedicineConverter.infoToDto(medicineInfoResponse.getBody().getItems().get(0));
+        MedicineInfoResponse medicineInfoResponse = medicineInfoApiController.getMedicineInfoFormApi(itemSeq).block();
+        MedicineInfoDto medicineInfoDto;
+        if(medicineInfoResponse.getBody().getItems()!=null){
+            try {
+                medicineInfoDto = MedicineConverter.infoToDto(medicineInfoResponse.getBody().getItems().get(0));
+            }catch (Exception e){
+                logger.warn("No medicine found in API");
+                return new SuccessResponse("No data received from API", 404);
+            }
             return new SuccessResponse<>(medicineInfoDto, 200);
         }
-        return new SuccessResponse("No data received from API or response body is null", 204);
+        return new SuccessResponse("No data received from API or response body is null", 404);
 
     }
 
     public SuccessResponse<Medicine> putStatistics(MedicineStatisticsDto medicineStatisticsDto){
-        Medicine medicine = medicineRepository.findByItemName(medicineStatisticsDto.getName());
+        Medicine medicine = medicineRepository.findByItemSeq(medicineStatisticsDto.getItemSeq());
 
         medicine.setRateTotal(medicineStatisticsDto.getRateTotal());
         medicine.setRateAmount(medicineStatisticsDto.getRateAmount());

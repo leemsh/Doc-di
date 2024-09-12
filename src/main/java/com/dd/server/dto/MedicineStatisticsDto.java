@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class MedicineStatisticsDto {
-    private String name;
+    private String itemSeq;
     private int rateTotal;
     private int rateAmount;
 }
