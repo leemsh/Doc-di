@@ -60,6 +60,7 @@ public class UserService {
     public boolean deleteUser(String email) {
         try {
             reminderService.deleteReminderByEmail(email);
+            reminderService.deleteBookedReminderByEmail(email);
             profileService.deleteImage(email);
             userRepository.deleteByEmail(email);
             refreshRepository.deleteByUsername(email);
