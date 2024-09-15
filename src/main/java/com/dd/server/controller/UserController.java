@@ -4,6 +4,7 @@ import com.dd.server.domain.User;
 import com.dd.server.dto.JoinDto;
 import com.dd.server.dto.SuccessResponse;
 import com.dd.server.dto.UserDto;
+import com.dd.server.service.MailService;
 import com.dd.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -18,8 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
-    private  final UserService userService;
-
+    private final UserService userService;
+    private final MailService mailService;
 
     @GetMapping(value = "/find", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse<User>> getUser(
@@ -78,24 +79,25 @@ public class UserController {
 
 
     //TODO 비밀번호 재발급
-//    @PostMapping("/findpw")
-//    public ResponseEntity<SuccessResponse<String>> findPw(
-//            @RequestParam String email){
-//
-//        SuccessResponse<String> response;
-//
-//        try {
-//
-//
-//        }catch (Exception e){
-//            response = new SuccessResponse<>(null, 500);
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.setContentType(MediaType.APPLICATION_JSON);
-//            return new ResponseEntity<>(response, headers, response.getStatus());
-//        }
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_JSON);
-//        return new ResponseEntity<>(response, headers, response.getStatus());
-//    }
+    @PutMapping("/findpw")
+    public ResponseEntity<SuccessResponse<String>> findPw(
+            @RequestParam String email){
+
+        String password = mailService.makeRandomPassword();
+        mailService.changePassword(email, password);
+
+        SuccessResponse<String> response;
+        try {
+            response = mailService.sendTemporaryPassword(email, password);
+        }catch (Exception e){
+            response = new SuccessResponse<>(null, 500);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            return new ResponseEntity<>(response, headers, response.getStatus());
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new ResponseEntity<>(response, headers, response.getStatus());
+    }
 }
