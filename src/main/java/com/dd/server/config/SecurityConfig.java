@@ -82,6 +82,7 @@ public class SecurityConfig {
                         .requestMatchers("/user/find").permitAll()
                         .requestMatchers("/user/edit").permitAll()
                         .requestMatchers("/user/delete").permitAll()
+                        .requestMatchers("/user/findpw").permitAll()
 
                         .requestMatchers("/statistic/find").permitAll()
                         .requestMatchers("/statistic/create").permitAll()
