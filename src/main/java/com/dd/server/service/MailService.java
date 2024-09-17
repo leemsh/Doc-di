@@ -40,6 +40,20 @@ public class MailService {
         }
     }
 
+    public SuccessResponse<String> sendEmailConfirmCode(String toEmail, String code) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(toEmail);
+        message.setSubject("[Doc-di] Email Confirm Code");
+        message.setText("Your temporary password is: " + code);
+        try {
+            mailSender.send(message);
+            logger.info("send email success");
+            return new SuccessResponse<> ("send email Successfully", 200);
+        }catch (Exception e) {
+            return new SuccessResponse<> ("send email Failed", 500);
+        }
+    }
+
     public String makeRandomPassword() {
         int passwordLength = 6;
         String charSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
