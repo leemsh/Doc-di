@@ -77,12 +77,14 @@ public class SecurityConfig {
                         .requestMatchers("/medicine/image").permitAll()
                         .requestMatchers("/medicine/find").permitAll()
                         .requestMatchers("/medicine/statistics").permitAll()
+                        .requestMatchers("/user/requestcode").permitAll()
+                        .requestMatchers("/user/checkcode").permitAll()
+                        .requestMatchers("/user/findpw").permitAll()
 
                         //임시 허용
                         .requestMatchers("/user/find").permitAll()
                         .requestMatchers("/user/edit").permitAll()
                         .requestMatchers("/user/delete").permitAll()
-                        .requestMatchers("/user/findpw").permitAll()
 
                         .requestMatchers("/statistic/find").permitAll()
                         .requestMatchers("/statistic/create").permitAll()

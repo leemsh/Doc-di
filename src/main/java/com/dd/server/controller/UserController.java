@@ -1,6 +1,7 @@
 package com.dd.server.controller;
 
 import com.dd.server.domain.User;
+import com.dd.server.dto.CheckCodeDto;
 import com.dd.server.dto.JoinDto;
 import com.dd.server.dto.SuccessResponse;
 import com.dd.server.dto.UserDto;
@@ -77,8 +78,28 @@ public class UserController {
         return new ResponseEntity<>(response, headers, response.getStatus());
     }
 
+    @PostMapping("/requestcode")
+    public ResponseEntity<SuccessResponse<String>> requestCode(
+            @RequestParam String email){
 
-    //TODO 비밀번호 재발급
+        SuccessResponse<String> response = userService.requestCode(email);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new ResponseEntity<>(response, headers, response.getStatus());
+    }
+
+    @DeleteMapping("/checkcode")
+    public ResponseEntity<SuccessResponse<String>> checkCode(
+            @RequestBody CheckCodeDto checkCodeDto){
+
+        SuccessResponse<String> response = userService.checkCode(checkCodeDto);;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new ResponseEntity<>(response, headers, response.getStatus());
+    }
+
     @PutMapping("/findpw")
     public ResponseEntity<SuccessResponse<String>> findPw(
             @RequestParam String email){
