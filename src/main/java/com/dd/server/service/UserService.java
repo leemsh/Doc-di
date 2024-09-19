@@ -121,7 +121,7 @@ public class UserService {
         }
 
         boolean isSameCode = legacyCheckCode.getCode().equals(checkCodeDto.getCode());
-        checkCodeRepository.delete(legacyCheckCode);
+        if(isSameCode) checkCodeRepository.delete(legacyCheckCode);
         if(legacyCheckCode.getEmail() != null){
             if(isSameCode){
                 return new SuccessResponse<>("check code successfully", 200);
