@@ -89,7 +89,7 @@ public class UserController {
         return new ResponseEntity<>(response, headers, response.getStatus());
     }
 
-    @DeleteMapping("/checkcode")
+    @PostMapping("/checkcode")
     public ResponseEntity<SuccessResponse<String>> checkCode(
             @RequestBody CheckCodeDto checkCodeDto){
 

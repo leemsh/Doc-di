@@ -44,7 +44,7 @@ public class MailService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
         message.setSubject("[Doc-di] Email Confirm Code");
-        message.setText("Your temporary password is: " + code);
+        message.setText("email confirm code: " + code);
         try {
             mailSender.send(message);
             logger.info("send email success");
