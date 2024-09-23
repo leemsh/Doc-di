@@ -26,7 +26,7 @@ public class PillPredictor {
     }
 
     private static final String MODEL = "model/yolov8.onnx";
-    private static final String PILL_NAMES_FILE = "model/pill_names.txt";
+    private static final String PILL_NAMES_FILE = "model/labels.txt";
 
     private static final long[] INPUT_SHAPE = new long[]{1, 3, 640, 640};
 
