@@ -67,11 +67,7 @@ public class MedicineConverter {
 
         FindByMedicineChartDto dto = new FindByMedicineChartDto();
 
-        dto.setColor1(prediction.color1());
-        dto.setColor2(prediction.color2());
-        dto.setShape(prediction.shape());
-        dto.setTxt1(prediction.text1());
-        dto.setTxt2(prediction.text2());
+        dto.setName(prediction.name());
 
         return dto;
     }
