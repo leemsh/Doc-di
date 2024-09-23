@@ -133,11 +133,11 @@ public class PillPredictor {
         return detections;
     }
 
-    public static PillPrediction predict(String imagePath) {
+    public static List<PillPrediction> predict(String imagePath) {
         try {
             OnnxTensor inputTensor = imageToTensor(imagePath);
             OrtSession ortSession = getOrtSession();
-            return detect(inputTensor, ortSession).get(0);
+            return detect(inputTensor, ortSession);
         } catch (IOException | OrtException e) {
             e.printStackTrace();
         }
