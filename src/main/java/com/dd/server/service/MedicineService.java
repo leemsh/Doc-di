@@ -114,11 +114,12 @@ public class MedicineService {
 
         List<PillPredictor.PillPrediction> nameData = PillPredictor.predict(filePath);
         List<Medicine> medicineData = new ArrayList<>();
-        assert nameData != null;
+        //assert nameData != null;
         if(nameData.isEmpty())return new SuccessResponse("No data received from AI", 404);
+        logger.info("AI Search : {}", nameData.get(0).name());
         for(PillPredictor.PillPrediction p : nameData){
-            Medicine medicine = medicineRepository.findByItemName(p.name());
-            medicineData.add(medicine);
+            List<Medicine> medicine = medicineRepository.findByMedicineName(p.name());
+            medicineData.addAll(medicine);
         }
         return new SuccessResponse<>(medicineData, 200);
     }

@@ -22,8 +22,6 @@ public interface MedicineRepository extends JpaRepository<Medicine, String> {
             "(:shape IS NULL OR m.drugShape LIKE %:shape%) AND " +
             "((:txt1 IS NULL OR m.printFront LIKE %:txt1%) AND (:txt2 IS NULL OR m.printBack LIKE %:txt2%) " +
             "OR (:txt1 IS NULL OR m.printBack LIKE %:txt1%) AND (:txt2 IS NULL OR m.printFront LIKE %:txt2%))")
-
-
     List<Medicine> findByChartMedicine(
             @Param("name") String name,
             @Param("color1") String color1,
@@ -32,4 +30,8 @@ public interface MedicineRepository extends JpaRepository<Medicine, String> {
             @Param("txt1") String txt1,
             @Param("txt2") String txt2
     );
+
+
+    @Query("SELECT m FROM Medicine m WHERE (:name IS NULL OR m.itemName LIKE %:name%)")
+    List<Medicine> findByMedicineName(@Param("name") String name);
 }

@@ -129,7 +129,6 @@ public class PillPredictor {
         labels.keySet().stream()
                 .sorted((o1, o2) -> labels.get(o2).compareTo(labels.get(o1)))
                 .forEach(label -> detections.add(new PillPrediction(label)));
-
         return detections;
     }
 

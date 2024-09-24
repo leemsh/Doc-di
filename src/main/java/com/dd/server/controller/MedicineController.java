@@ -77,7 +77,9 @@ public class MedicineController {
         }
 
         // 파일 저장 경로 지정 (예: 서버의 "uploads" 디렉토리)
-        String uploadDir = "/opt/uploads/";
+        String uploadDir = System.getProperty("user.dir");
+        //String uploadDir = "\\opt\\uploads\\";
+        //String uploadDir = "C:\\Users\\leems\\Downloads\\opts";
         String originalFilename = imageFile.getOriginalFilename();
         if (originalFilename == null || originalFilename.contains("..")) {
             logger.error("Error: Invalid file name {}", originalFilename);
