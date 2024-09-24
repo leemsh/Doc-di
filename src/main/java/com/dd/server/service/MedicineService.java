@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -110,6 +111,15 @@ public class MedicineService {
 
 
     public SuccessResponse<List<Medicine>> getMedicineByImage(String filePath) throws IOException {
-        return getMedicine(MedicineConverter.toDto(PillPredictor.predict(filePath)));
+
+        List<PillPredictor.PillPrediction> nameData = PillPredictor.predict(filePath);
+        List<Medicine> medicineData = new ArrayList<>();
+        assert nameData != null;
+        if(nameData.isEmpty())return new SuccessResponse("No data received from AI", 404);
+        for(PillPredictor.PillPrediction p : nameData){
+            Medicine medicine = medicineRepository.findByItemName(p.name());
+            medicineData.add(medicine);
+        }
+        return new SuccessResponse<>(medicineData, 200);
     }
 }
