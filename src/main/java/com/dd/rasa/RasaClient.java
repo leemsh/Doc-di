@@ -10,7 +10,11 @@ import java.net.http.HttpRequest.BodyPublishers;
 import java.util.HashMap;
 import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@Service
+@RequiredArgsConstructor
 public class RasaClient {
     // Rasa 서버 URL
     private static final String RASA_URL = "http://localhost:5015/webhooks/rest/webhook";
