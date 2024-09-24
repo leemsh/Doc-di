@@ -3,6 +3,7 @@ package com.dd.server.controller;
 
 import com.dd.server.dto.ChatBotClientDto;
 import com.dd.server.dto.SuccessResponse;
+import com.dd.server.service.ChatBotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
