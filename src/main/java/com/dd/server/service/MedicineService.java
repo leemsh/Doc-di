@@ -121,6 +121,7 @@ public class MedicineService {
             List<Medicine> medicine = medicineRepository.findByMedicineName(p.name());
             medicineData.addAll(medicine);
         }
+        if(medicineData.isEmpty())return new SuccessResponse("No data received from DB", 404);
         return new SuccessResponse<>(medicineData, 200);
     }
 }
