@@ -104,6 +104,8 @@ public class SecurityConfig {
                         .requestMatchers("/data/{fileName}").permitAll()
                         .requestMatchers("/data").permitAll()
 
+                        .requestMatchers("/chatbot").permitAll()
+
                         .anyRequest().authenticated());
 
         // JwtFilter 등록

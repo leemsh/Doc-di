@@ -1,9 +1,9 @@
-package com.dd.server.controller;
+package com.dd.rasa.controller;
 
 
-import com.dd.server.dto.ChatBotClientDto;
+import com.dd.rasa.dto.ChatBotClientDto;
 import com.dd.server.dto.SuccessResponse;
-import com.dd.server.service.ChatBotService;
+import com.dd.rasa.service.ChatBotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
