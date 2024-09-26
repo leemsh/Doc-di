@@ -208,11 +208,11 @@ public class PillPredictor {
         return null;
     }
 
-    public static void main(String[] args) throws IOException {
-        String imagePath = "D:\\K-001900-010224-016551-029345_0_2_0_2_70_000_200.png";
-        for (PillPrediction prediction : predict(imagePath)) {
-            System.out.println(String.format("detect/%s_%d_%d_%d_%d_%f.png", prediction.name, prediction.x, prediction.y, prediction.w, prediction.h, prediction.prob));
-            saveDetection(imagePath, prediction);
-        }
-    }
+//    public static void main(String[] args) throws IOException {
+//        String imagePath = "D:\\K-001900-010224-016551-029345_0_2_0_2_70_000_200.png";
+//        for (PillPrediction prediction : predict(imagePath)) {
+//            System.out.println(String.format("detect/%s_%d_%d_%d_%d_%f.png", prediction.name, prediction.x, prediction.y, prediction.w, prediction.h, prediction.prob));
+//            saveDetection(imagePath, prediction);
+//        }
+//    }
 }
