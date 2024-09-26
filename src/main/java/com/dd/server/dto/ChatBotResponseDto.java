@@ -1,4 +1,4 @@
-package com.dd.rasa.dto;
+package com.dd.server.dto;
 
 public class ChatBotResponseDto {
 }

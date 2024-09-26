@@ -1,7 +1,7 @@
-package com.dd.rasa.controller;
+package com.dd.server.controller;
 
-import com.dd.rasa.dto.ChatBotClientDto;
-import com.dd.rasa.dto.RasaDto;
+import com.dd.server.dto.ChatBotClientDto;
+import com.dd.server.dto.RasaDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

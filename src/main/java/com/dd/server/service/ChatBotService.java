@@ -1,11 +1,10 @@
-package com.dd.rasa.service;
+package com.dd.server.service;
 
-import com.dd.rasa.controller.RasaController;
-import com.dd.rasa.dto.ChatBotClientDto;
-import com.dd.rasa.dto.RasaDto;
+import com.dd.server.controller.RasaController;
+import com.dd.server.dto.ChatBotClientDto;
+import com.dd.server.dto.RasaDto;
 import com.dd.server.dto.FindByMedicineChartDto;
 import com.dd.server.dto.SuccessResponse;
-import com.dd.server.service.MedicineService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -24,8 +23,13 @@ public class ChatBotService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public SuccessResponse chatWithRasa(ChatBotClientDto chatBotClientDto) {
-
-        RasaDto rasaDto = RasaController.send(chatBotClientDto).block();
+        RasaDto rasaDto = new RasaDto();
+        try {
+            rasaDto = RasaController.send(chatBotClientDto).block();
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return new SuccessResponse("Rasa API Failed", 500);
+        }
         assert rasaDto != null;
         if(Objects.equals(rasaDto.getStatus(), 200)){
             if(Objects.equals(rasaDto.getAction(), "DB_SEARCH")){
