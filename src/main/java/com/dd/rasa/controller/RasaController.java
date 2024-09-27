@@ -13,12 +13,13 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class RasaController {
     // Rasa 서버 URL
-    private static final String RASA_URL = "http://localhost:5015/webhooks/rest/webhook";
-    private static final Logger logger = LoggerFactory.getLogger(RasaController.class);
+    private static final String RASA_URL = "http://147.185.221.22:52101/";
+    private static final String MESSAGE_PATH = "webhooks/rest/webhook";
+    protected static final Logger logger = LoggerFactory.getLogger(RasaController.class);
 
     // WebClient 인스턴스 (Spring의 WebClient를 사용)
-    private static final WebClient webClient = WebClient.builder()
-            .baseUrl(RASA_URL)
+    protected static final WebClient webClient = WebClient.builder()
+            .baseUrl(RASA_URL + MESSAGE_PATH)
             .defaultHeader("Content-Type", "application/json")
             .build();
 
