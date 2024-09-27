@@ -2,10 +2,11 @@ package com.dd.server.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class RasaDto {
-    private int status;
-    private String message;
-    private String action;
-    private String data;
+    private String recipient_id;
+    private String text;
+    private List<RasaButtonDto> buttons;
 }
