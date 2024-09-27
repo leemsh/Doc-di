@@ -1,6 +1,7 @@
 package com.dd.server.service;
 
 import com.dd.server.controller.RasaController;
+import com.dd.server.domain.Medicine;
 import com.dd.server.dto.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -31,8 +32,25 @@ public class ChatBotService {
         }
         assert listRasaDto != null;
 
+        RasaDto newRasaDto = new RasaDto();
+        for(RasaDto rasaDto : listRasaDto){
+            RasaCustomDto rasaCustomDto = rasaDto.getCustom();
+            if(rasaCustomDto!=null){
+                if(Objects.equals(rasaCustomDto.getAction(), "DB_SEARCH")){
+                    List<Medicine> medicine = medicineService.getMedicine(rasaCustomDto.getData()).getData();
 
-        // 다른 ACTION 들 생기면 추가 가능
+                    newRasaDto.setMedicineList(medicine);
+                    break;
+                }
+
+                // 다른 ACTION 들 생기면 추가 가능
+            }
+        }
+
+        listRasaDto.add(newRasaDto);
+
+
+
 
         return new SuccessResponse<>(listRasaDto, 200);
     }

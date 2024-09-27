@@ -82,7 +82,13 @@ public class MedicineApiController {
         try {
             logger.info("Converting XML to MedicineResponse");
             MedicineResponse response = xmlMapper.readValue(xml, MedicineResponse.class);
-            logger.info("Converted MedicineResponse: " + response.getBody().getItems().get(0).getItemName());
+
+            if(response.getBody().getItems()==null){
+                logger.info("there is no item Response");
+            }else{
+                logger.info("Converted MedicineResponse: " + response.getBody().getItems().get(0).getItemName());
+            }
+
             return response;
         } catch (Exception e) {
             logger.error("Failed to parse XML to MedicineResponse", e);
