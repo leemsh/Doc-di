@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 
 public class ChatBotClientDto {
-    private String email;
+    private String sender;
     private String message;
 }
