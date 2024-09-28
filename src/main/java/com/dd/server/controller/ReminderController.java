@@ -22,7 +22,7 @@ public class ReminderController {
 
     @GetMapping(value = "/medicine/find", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse<List<Reminder>>> getReminder(@RequestParam(required = true) String email){
-        SuccessResponse<java.util.List<Reminder>> response = reminderService.getReminder(email);
+        SuccessResponse<List<Reminder>> response = reminderService.getReminder(email);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(response, headers, response.getStatus());
@@ -56,7 +56,7 @@ public class ReminderController {
 
     @GetMapping(value = "/booked/find", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse<List<Booked>>> getBookedReminder(@RequestParam(required = true) String email){
-        SuccessResponse<java.util.List<Booked>> response = reminderService.getBookedReminder(email);
+        SuccessResponse<List<Booked>> response = reminderService.getBookedReminder(email);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(response, headers, response.getStatus());
