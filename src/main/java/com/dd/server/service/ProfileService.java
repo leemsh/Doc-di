@@ -79,7 +79,6 @@ public class ProfileService {
         }
     }
 
-    @DeleteMapping(value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
     public void deleteImage(String email) {
         try {
             s3Service.delete(userRepository.findByEmail(email).getImage());
