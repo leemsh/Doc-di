@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RasaController {
     // Rasa 서버 URL
-    private static final String RASA_URL = "http://147.185.221.22:52101/";
+    private static final String RASA_URL = "commercial-approve.gl.at.ply.gg:2084";
     private static final String MESSAGE_PATH = "webhooks/rest/webhook";
     protected static final Logger logger = LoggerFactory.getLogger(RasaController.class);
 
