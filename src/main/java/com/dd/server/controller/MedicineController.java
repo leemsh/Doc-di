@@ -3,6 +3,7 @@ package com.dd.server.controller;
 import com.dd.server.domain.Medicine;
 import com.dd.server.dto.*;
 import com.dd.server.service.MedicineService;
+import com.dd.server.service.SearchHistoryService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,16 +25,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MedicineController {
     private final MedicineService medicineService;
+    private final SearchHistoryService searchHistoryService;
 
-    /*
-    * 알약 검색 컨트롤러
-    * path : /medicine/find
-    * return : 약에 대한 정보
-     */
 
     @PostMapping(value = "/find", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse<List<Medicine>>> getMedicine(@RequestBody FindByMedicineChartDto findByMedicineChartDto) {
-
         SuccessResponse<List<Medicine>> response = this.medicineService.getMedicine(findByMedicineChartDto);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -44,9 +40,9 @@ public class MedicineController {
 
 
     @GetMapping(value = "/info", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SuccessResponse<MedicineInfoDto>> getMedicineInfo(@RequestParam String itemSeq){
-
-        SuccessResponse<MedicineInfoDto> response = this.medicineService.getMedicineInfo(itemSeq);
+    public ResponseEntity<SuccessResponse<MedicineInfoDto>> getMedicineInfo(@RequestBody SearchHistoryDto searchHistoryDto) {
+        SuccessResponse<MedicineInfoDto> response = this.medicineService.getMedicineInfo(searchHistoryDto.getItemSeq());
+        searchHistoryService.createHistory(searchHistoryDto);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
