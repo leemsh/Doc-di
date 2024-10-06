@@ -39,7 +39,7 @@ public class MedicineController {
 
 
 
-    @GetMapping(value = "/info", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/info", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse<MedicineInfoDto>> getMedicineInfo(@RequestBody SearchHistoryDto searchHistoryDto) {
         SuccessResponse<MedicineInfoDto> response = this.medicineService.getMedicineInfo(searchHistoryDto.getItemSeq());
         searchHistoryService.createHistory(searchHistoryDto);
