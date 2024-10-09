@@ -30,5 +30,5 @@
   </li>
   <li><strong>AI 모듈:</strong> 사용되는 AI 모듈과 해당 모듈의 기능을 상세히 설명합니다. 각 모듈의 내부 Class 구성도와, 멤버 함수 및 데이터를 기술합니다.</li>
 </ol>
-![TopLevelArchitecture drawio](https://github.com/user-attachments/assets/123bbbf0-bb3c-420b-9b5d-c9011d9ab4be)
+![Top-Level 구조](https://raw.githubusercontent.com/user-attachments/assets/123bbbf0-bb3c-420b-9b5d-c9011d9ab4be?raw=true)
 
