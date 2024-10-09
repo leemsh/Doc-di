@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<h1>💊 똑디 (Tokdi) Application</h1>
+<h1>💊 똑디 (Ddoc-di) Application</h1>
 
 <p><strong>똑디</strong>는 개인 맞춤형 의약품 추천 및 복용 기록 관리를 제공하는 애플리케이션입니다. 사용자에게 최적의 건강 관리 솔루션을 제공하기 위해 AI 기술을 활용한 다양한 기능을 지원합니다.</p>
 
