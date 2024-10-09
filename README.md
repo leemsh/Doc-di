@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
+
 
 <h1>💊 똑디 (Ddoc-di) Application</h1>
 
@@ -38,5 +32,3 @@
 </ol>
 ![TopLevelArchitecture drawio](https://github.com/user-attachments/assets/123bbbf0-bb3c-420b-9b5d-c9011d9ab4be)
 
-</body>
-</html>
