@@ -3,28 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tokdi README</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-    }
-    h1, h2, h3 {
-      color: #2c3e50;
-    }
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
-    ul li::before {
-      content: "💡";
-      margin-right: 10px;
-    }
-    .emoji {
-      font-size: 1.2em;
-      margin-right: 5px;
-    }
-  </style>
 </head>
 <body>
 
