@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 public class ReminderDto {
     private String email;
     private String medicineName;
-    private short dosage;
+    private String dosage;
     private String recurrence;
     private String endDate;
     private String medicationTime;

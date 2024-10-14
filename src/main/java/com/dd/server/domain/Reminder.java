@@ -20,7 +20,7 @@ public class Reminder {
     private String medicineName; //약이름
 
     @Column(nullable = false)
-    private short dosage;
+    private String dosage;
 
     @Column(nullable = false)
     private String recurrence;
