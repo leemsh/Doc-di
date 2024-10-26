@@ -36,7 +36,7 @@ public class PillPredictor {
     private static final long[] INPUT_SHAPE = new long[]{1, 3, 640, 640};
     private static final float PROB_THRESHOLD = 0.4F;
 
-    private static final String[] IDX_TO_PILL_NAME = new String[101];
+    private static final List<String> IDX_TO_PILL_NAME = new ArrayList<>();
     private static boolean isPillNameLoaded = false;
 
     private static final OrtEnvironment ortEnv = OrtEnvironment.getEnvironment();
@@ -44,9 +44,7 @@ public class PillPredictor {
     private static void loadPillNames() {
         try {
             List<String> lines = Files.readAllLines(new File(PILL_NAMES_FILE).toPath(), StandardCharsets.UTF_8);
-            for (int i = 0; i < lines.size(); i++) {
-                IDX_TO_PILL_NAME[i] = lines.get(i);
-            }
+            IDX_TO_PILL_NAME.addAll(lines);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -132,7 +130,7 @@ public class PillPredictor {
             isPillNameLoaded = true;
         }
 
-        int labelCount = IDX_TO_PILL_NAME.length;
+        int labelCount = IDX_TO_PILL_NAME.size();
         int offsetToLabel = 4;  // output format is x, y, w, h, class-0 ... class-N
 
         Map<String, OnnxTensor> inputs = new HashMap<>();
@@ -167,7 +165,7 @@ public class PillPredictor {
                 continue;
             }
             labels.put(new PillPrediction(
-                    IDX_TO_PILL_NAME[bestLabel],
+                    IDX_TO_PILL_NAME.get(bestLabel),
                     center_x,
                     center_y,
                     width,
@@ -208,11 +206,11 @@ public class PillPredictor {
         return null;
     }
 
-//    public static void main(String[] args) throws IOException {
-//        String imagePath = "D:\\K-001900-010224-016551-029345_0_2_0_2_70_000_200.png";
-//        for (PillPrediction prediction : predict(imagePath)) {
-//            System.out.println(String.format("detect/%s_%d_%d_%d_%d_%f.png", prediction.name, prediction.x, prediction.y, prediction.w, prediction.h, prediction.prob));
-//            saveDetection(imagePath, prediction);
-//        }
-//    }
+    public static void main(String[] args) throws IOException {
+        String imagePath = "F:\\zer0ken\\dataset-preprocess\\test.png";
+        for (PillPrediction prediction : predict(imagePath)) {
+            System.out.println(String.format("detect/%s_%d_%d_%d_%d_%f.png", prediction.name, prediction.x, prediction.y, prediction.w, prediction.h, prediction.prob));
+            saveDetection(imagePath, prediction);
+        }
+    }
 }
