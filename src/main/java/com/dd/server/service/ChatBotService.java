@@ -33,13 +33,14 @@ public class ChatBotService {
         assert listRasaDto != null;
 
         RasaDto newRasaDto = new RasaDto();
+
         for(RasaDto rasaDto : listRasaDto){
             RasaCustomDto rasaCustomDto = rasaDto.getCustom();
             if(rasaCustomDto!=null){
                 if(Objects.equals(rasaCustomDto.getAction(), "DB_SEARCH")){
                     List<Medicine> medicine = medicineService.getMedicine(rasaCustomDto.getData()).getData();
-
-                    newRasaDto.setMedicineList(medicine);
+                    rasaDto.setText("MEDICINE_SEARCH_RESULT");
+                    rasaDto.setMedicineList(medicine);
                     break;
                 }
 
@@ -47,7 +48,6 @@ public class ChatBotService {
             }
         }
 
-        listRasaDto.add(newRasaDto);
 
 
 
