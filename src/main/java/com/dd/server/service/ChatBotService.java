@@ -1,5 +1,6 @@
 package com.dd.server.service;
 
+import com.dd.server.controller.GeminiController;
 import com.dd.server.controller.NaverApiController;
 import com.dd.server.controller.RasaController;
 import com.dd.server.domain.Medicine;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,6 +24,7 @@ public class ChatBotService {
     private final MedicineService medicineService;
     private final RasaController rasaController;
     private final NaverApiController naverApiController;
+    private final GeminiController geminiController;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public SuccessResponse chatWithRasa(ChatBotClientDto chatBotClientDto) {
@@ -39,6 +42,7 @@ public class ChatBotService {
         for(RasaDto rasaDto : listRasaDto){
             RasaCustomDto rasaCustomDto = rasaDto.getCustom();
             if(rasaCustomDto!=null){
+                //알약 검색
                 if(Objects.equals(rasaCustomDto.getAction(), "DB_SEARCH")){
                     List<Medicine> medicine = medicineService.getMedicine(rasaCustomDto.getData()).getData();
                     rasaDto.setText("MEDICINE_SEARCH_RESULT");
@@ -46,19 +50,39 @@ public class ChatBotService {
                     break;
                 }
 
+                //Naver API 검색
                 if(Objects.equals(rasaCustomDto.getAction(), "WEB_SEARCH")){
+                    //Naver API 로 받아옴
                     NaverApiResponseDto data = naverApiController.send(rasaCustomDto.getData().getQuery()).block();
                     rasaDto.setText("SYMPTOM_SEARCH_RESULT");
+                    GeminiDto geminiDto = new GeminiDto();
+                    geminiDto.setSender(chatBotClientDto.getSender());
 
+                    //Naver API 로 받아온 데이터를 가공하여 Gemini에 보낼 수 있도록 세팅(검색결과 최대 10개)
+                    List<GeminiSenderDataDto> geminiSenderDataDtos = new ArrayList<>();
+                    assert data != null;
+                    if(data.getItems()!=null) {
+                        for(NaverSearchItemDto naverSearchItemDto : data.getItems()) {
+                            GeminiSenderDataDto geminiSenderDataDto = new GeminiSenderDataDto();
+                            geminiSenderDataDto.setTitle(naverSearchItemDto.getTitle());
+                            geminiSenderDataDto.setLink(naverSearchItemDto.getLink());
+                            geminiSenderDataDtos.add(geminiSenderDataDto);
+                        }
+                        geminiDto.setData(geminiSenderDataDtos);
+                        List<RasaDto> appendListRasaDto = geminiController.send(geminiDto).block();
+                        assert appendListRasaDto != null;
+                        listRasaDto.addAll(appendListRasaDto);
+                    }
+                    //Naver API 로 받아온 데이터가 없을 시 Gemini에 문서요약 요청 스킵 후 검색결과 없음 작성
+                    else{
+                        RasaDto tempRasaDto = new RasaDto();
+                        tempRasaDto.setText("Sorry there is No Search Result");
+                        listRasaDto.add(tempRasaDto);
+                    }
                     break;
                 }
             }
         }
-
-
-
-
-
         return new SuccessResponse<>(listRasaDto, 200);
     }
 
