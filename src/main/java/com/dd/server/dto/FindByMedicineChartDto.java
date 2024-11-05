@@ -12,4 +12,5 @@ public class FindByMedicineChartDto {
     public String shape; // 제형
     public String txt1; //글자1
     public String txt2; //글자2
+    public String query; // 검색용 쿼리
 }

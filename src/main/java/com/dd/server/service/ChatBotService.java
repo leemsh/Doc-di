@@ -1,5 +1,6 @@
 package com.dd.server.service;
 
+import com.dd.server.controller.NaverApiController;
 import com.dd.server.controller.RasaController;
 import com.dd.server.domain.Medicine;
 import com.dd.server.dto.*;
@@ -20,6 +21,7 @@ public class ChatBotService {
 
     private final MedicineService medicineService;
     private final RasaController rasaController;
+    private final NaverApiController naverApiController;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public SuccessResponse chatWithRasa(ChatBotClientDto chatBotClientDto) {
@@ -44,7 +46,12 @@ public class ChatBotService {
                     break;
                 }
 
-                // 다른 ACTION 들 생기면 추가 가능
+                if(Objects.equals(rasaCustomDto.getAction(), "WEB_SEARCH")){
+                    NaverApiResponseDto data = naverApiController.send(rasaCustomDto.getData().getQuery()).block();
+                    rasaDto.setText("SYMPTOM_SEARCH_RESULT");
+
+                    break;
+                }
             }
         }
 

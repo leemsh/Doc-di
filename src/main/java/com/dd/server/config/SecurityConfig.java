@@ -109,6 +109,8 @@ public class SecurityConfig {
                         .requestMatchers("/history/get").permitAll()
                         .requestMatchers("/history/delete").permitAll()
 
+                        .requestMatchers("/test").permitAll()
+
                         .anyRequest().authenticated());
 
         // JwtFilter 등록
