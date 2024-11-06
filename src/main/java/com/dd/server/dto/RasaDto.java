@@ -12,4 +12,5 @@ public class RasaDto {
     private List<RasaButtonDto> buttons;
     private RasaCustomDto custom;
     private List<Medicine> medicineList;
+    private List<GeminiResponseDataDto> data;
 }
