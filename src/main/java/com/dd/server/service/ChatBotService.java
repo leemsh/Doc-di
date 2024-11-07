@@ -57,6 +57,7 @@ public class ChatBotService {
                     rasaDto.setText("SYMPTOM_SEARCH_RESULT");
                     GeminiDto geminiDto = new GeminiDto();
                     geminiDto.setSender(chatBotClientDto.getSender());
+                    geminiDto.setQuery(rasaCustomDto.getData().getQuery());
 
                     //Naver API 로 받아온 데이터를 가공하여 Gemini에 보낼 수 있도록 세팅(검색결과 최대 10개)
                     List<GeminiSenderDataDto> geminiSenderDataDtos = new ArrayList<>();
