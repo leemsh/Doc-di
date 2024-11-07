@@ -59,9 +59,15 @@ public class ChatBotService {
                     geminiDto.setSender(chatBotClientDto.getSender());
                     geminiDto.setQuery(rasaCustomDto.getData().getQuery());
 
+                    if(data==null){
+                        RasaDto tempRasaDto = new RasaDto();
+                        tempRasaDto.setText("Sorry There is No Naver Knowledge In Result");
+                        listRasaDto.add(tempRasaDto);
+                        break;
+                    }
+
                     //Naver API 로 받아온 데이터를 가공하여 Gemini에 보낼 수 있도록 세팅(검색결과 최대 10개)
                     List<GeminiSenderDataDto> geminiSenderDataDtos = new ArrayList<>();
-                    assert data != null;
                     if(data.getItems()!=null) {
                         for(NaverSearchItemDto naverSearchItemDto : data.getItems()) {
                             GeminiSenderDataDto geminiSenderDataDto = new GeminiSenderDataDto();
@@ -70,9 +76,23 @@ public class ChatBotService {
                             geminiSenderDataDtos.add(geminiSenderDataDto);
                         }
                         geminiDto.setData(geminiSenderDataDtos);
-                        List<RasaDto> appendListRasaDto = geminiController.send(geminiDto).block();
-                        assert appendListRasaDto != null;
-                        listRasaDto.addAll(appendListRasaDto);
+                        List<RasaDto> appendListRasaDto = new ArrayList<>();
+                        try {
+                            appendListRasaDto = geminiController.send(geminiDto).block();
+                        }catch (Exception e){
+                            logger.error(e.getMessage());
+                            RasaDto tempRasaDto = new RasaDto();
+                            tempRasaDto.setText("Sorry there is No Search Result");
+                            listRasaDto.add(tempRasaDto);
+                        }
+                        if(appendListRasaDto !=null){
+                            listRasaDto.addAll(appendListRasaDto);
+                        }
+                        else{
+                            RasaDto tempRasaDto = new RasaDto();
+                            tempRasaDto.setText("Sorry Gemini summary has been failed");
+                            listRasaDto.add(tempRasaDto);
+                        }
                     }
                     //Naver API 로 받아온 데이터가 없을 시 Gemini에 문서요약 요청 스킵 후 검색결과 없음 작성
                     else{
