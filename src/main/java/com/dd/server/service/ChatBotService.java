@@ -82,7 +82,7 @@ public class ChatBotService {
                         }catch (Exception e){
                             logger.error(e.getMessage());
                             RasaDto tempRasaDto = new RasaDto();
-                            tempRasaDto.setText("Sorry there is No Search Result");
+                            tempRasaDto.setText("Sorry Gemini summary has been failed");
                             listRasaDto.add(tempRasaDto);
                         }
                         if(appendListRasaDto !=null){
@@ -90,7 +90,7 @@ public class ChatBotService {
                         }
                         else{
                             RasaDto tempRasaDto = new RasaDto();
-                            tempRasaDto.setText("Sorry Gemini summary has been failed");
+                            tempRasaDto.setText("No Result Gemini summary");
                             listRasaDto.add(tempRasaDto);
                         }
                     }
