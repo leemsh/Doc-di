@@ -32,7 +32,8 @@ public class NaverApiController {
                 .scheme("HTTPS")
                 .host(NAVER_URL)
                 .path(API_PATH)
-                .queryParam("query",query);
+                .queryParam("query",query)
+                .queryParam("display",5);
 
         String uri = uriBuilder.build().toUriString();
 
