@@ -54,7 +54,7 @@ public class ChatBotService {
                 if(Objects.equals(rasaCustomDto.getAction(), "WEB_SEARCH")){
                     //Naver API 로 받아옴
                     NaverApiResponseDto data = naverApiController.send(rasaCustomDto.getData().getQuery()).block();
-                    rasaDto.setText("SYMPTOM_SEARCH_RESULT");
+                    //rasaDto.setText("SYMPTOM_SEARCH_RESULT");
                     GeminiDto geminiDto = new GeminiDto();
                     geminiDto.setSender(chatBotClientDto.getSender());
                     geminiDto.setQuery(rasaCustomDto.getData().getQuery());
