@@ -45,7 +45,7 @@ public class ChatBotService {
                 //알약 검색
                 if(Objects.equals(rasaCustomDto.getAction(), "DB_SEARCH")){
                     List<Medicine> medicine = medicineService.getMedicine(rasaCustomDto.getData()).getData();
-                    rasaDto.setText("MEDICINE_SEARCH_RESULT");
+                    //rasaDto.setText("MEDICINE_SEARCH_RESULT");
                     rasaDto.setMedicineList(medicine);
                     break;
                 }
