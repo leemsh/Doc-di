@@ -69,7 +69,7 @@ public class MedicineController {
             return new ResponseEntity<>(response, headers, response.getStatus());
         }
 
-        List<PillPredictReceiveDto> receiveDtoList = pillPredictController.send(imageFile).collectList().block();
+        List<PillPredictReceiveDto> receiveDtoList = pillPredictController.send(imageFile).block();
         if (receiveDtoList == null || receiveDtoList.isEmpty()) {
             logger.error("Error: PillPredictReceiveDto is null or empty");
             HttpHeaders headers = new HttpHeaders();
@@ -94,9 +94,11 @@ public class MedicineController {
             }
             SuccessResponse<List<Medicine>> tempResponse = medicineService.getMedicine(findByMedicineChartDto);
             if(tempResponse.getStatus() == 200) medicineResponse.addAll(tempResponse.getData());
+            logger.info("info:medicine:{}", tempResponse.getData());
         }
-
-        SuccessResponse<List<Medicine>> response = new SuccessResponse<>(medicineResponse, 200);
+        SuccessResponse<List<Medicine>> response;
+        if(!medicineResponse.isEmpty()) response= new SuccessResponse<>(medicineResponse, 200);
+        else response= new SuccessResponse("No medicine found in database for given criteria", 200);
 
         // 응답 생성
         HttpHeaders headers = new HttpHeaders();

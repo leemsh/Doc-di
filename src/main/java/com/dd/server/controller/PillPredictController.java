@@ -29,7 +29,7 @@ public class PillPredictController {
             .defaultHeader("Content-Type", "image/jpg")
             .build();
 
-    public Flux<PillPredictReceiveDto> send(MultipartFile file) throws IOException {
+    public Mono<List<PillPredictReceiveDto>> send(MultipartFile file) throws IOException {
         byte[] imageBytes = file.getBytes();
 
         return webClient.post()
@@ -39,7 +39,7 @@ public class PillPredictController {
                     logger.error("Error: Status Code {}", clientResponse.statusCode());
                     return Mono.error(new RuntimeException("Error: " + clientResponse.statusCode()));
                 })
-                .bodyToFlux(new ParameterizedTypeReference<PillPredictReceiveDto>() {})
+                .bodyToMono(new ParameterizedTypeReference<List<PillPredictReceiveDto>>() {})
                 .doOnNext(pillPredictReceiveDto -> logger.info("PillPredict 응답: {}", pillPredictReceiveDto))
                 .doOnError(e -> logger.error("Error occurred: {}", e.getMessage()));
     }

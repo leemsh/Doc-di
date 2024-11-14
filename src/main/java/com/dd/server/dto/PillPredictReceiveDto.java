@@ -8,4 +8,5 @@ import java.util.List;
 public class PillPredictReceiveDto {
     private List<String> color;
     private List<String> shape;
+    private List<List<String>> similar_color;
 }
