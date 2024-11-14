@@ -9,7 +9,6 @@ import java.util.List;
 public class RasaDto {
     private String recipient_id;
     private String text;
-    private List<RasaButtonDto> buttons;
     private RasaCustomDto custom;
     private List<Medicine> medicineList;
     private List<GeminiResponseDataDto> data;

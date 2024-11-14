@@ -40,13 +40,13 @@ public class ChatBotService {
         RasaCustomDto rasaCustomDto = rasaDto.getCustom();
 
         //알약 검색
-        if(Objects.equals(rasaCustomDto.getAction(), "DB_SEARCH")){
+        if(rasaCustomDto != null && Objects.equals(rasaCustomDto.getAction(), "DB_SEARCH")){
             List<Medicine> medicine = medicineService.getMedicine(rasaCustomDto.getData()).getData();
             rasaDto.setMedicineList(medicine);
         }
 
         //Naver API 검색
-        if(Objects.equals(rasaCustomDto.getAction(), "WEB_SEARCH")){
+        if(rasaCustomDto != null && Objects.equals(rasaCustomDto.getAction(), "WEB_SEARCH")){
             //Naver API 로 받아옴
             NaverApiResponseDto data = naverApiController.send(rasaCustomDto.getData().getQuery()).block();
             GeminiDto geminiDto = new GeminiDto();
@@ -73,8 +73,7 @@ public class ChatBotService {
                 }
                 catch (Exception e) {
                     logger.error(e.getMessage());
-                    RasaDto tempRasaDto = new RasaDto();
-                    tempRasaDto.setText("Sorry Gemini summary has been failed");
+                    rasaDto.setText("Sorry Gemini summary has been failed");
                 }
             }
             //Naver API 로 받아온 데이터가 없을 시 Gemini에 문서요약 요청 스킵 후 검색결과 없음 작성
