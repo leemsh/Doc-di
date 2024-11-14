@@ -81,7 +81,9 @@ public class ChatBotService {
                 rasaDto.setText("Sorry there is No Search Result");
             }
         }
-        return new SuccessResponse<>(rasaDto, 200);
+        List<RasaDto> responseData = new ArrayList<>();
+        responseData.add(rasaDto);
+        return new SuccessResponse<>(responseData, 200);
     }
 
     private FindByMedicineChartDto convertStringToMedicineChartDto(String data) {
