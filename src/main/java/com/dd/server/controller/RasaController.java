@@ -26,7 +26,7 @@ public class RasaController {
             .defaultHeader("Content-Type", "application/json")
             .build();
 
-    public Mono<List<RasaDto>> send(ChatBotClientDto chatBotClientDto) {
+    public Mono<RasaDto> send(ChatBotClientDto chatBotClientDto) {
         return webClient.post()
                 .bodyValue(chatBotClientDto)
                 .retrieve()
@@ -34,8 +34,8 @@ public class RasaController {
                     logger.error("Error: Status Code {}", clientResponse.statusCode());
                     return Mono.error(new RuntimeException("Error: " + clientResponse.statusCode()));
                 })
-                .bodyToMono(new ParameterizedTypeReference<List<RasaDto>>() {})
-                .doOnNext(rasaDtoList -> logger.info("Rasa 응답: {}", rasaDtoList))
+                .bodyToMono(new ParameterizedTypeReference<RasaDto>() {})
+                .doOnNext(rasaDto -> logger.info("Rasa 응답: {}", rasaDto))
                 .doOnError(e -> logger.error("Error occurred: {}", e.getMessage()));
     }
 }

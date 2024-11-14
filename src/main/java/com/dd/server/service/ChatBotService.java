@@ -28,83 +28,61 @@ public class ChatBotService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public SuccessResponse chatWithRasa(ChatBotClientDto chatBotClientDto) {
-        List<RasaDto> listRasaDto;
+        RasaDto rasaDto;
         try {
-            listRasaDto = rasaController.send(chatBotClientDto).block();
+            rasaDto = rasaController.send(chatBotClientDto).block();
         }catch (Exception e){
             logger.error(e.getMessage());
             return new SuccessResponse("Rasa API Failed", 500);
         }
-        assert listRasaDto != null;
+        assert rasaDto != null;
 
-        RasaDto newRasaDto = new RasaDto();
+        RasaCustomDto rasaCustomDto = rasaDto.getCustom();
 
-        for(RasaDto rasaDto : listRasaDto){
-            RasaCustomDto rasaCustomDto = rasaDto.getCustom();
-            if(rasaCustomDto!=null){
-                //알약 검색
-                if(Objects.equals(rasaCustomDto.getAction(), "DB_SEARCH")){
-                    List<Medicine> medicine = medicineService.getMedicine(rasaCustomDto.getData()).getData();
-                    //rasaDto.setText("MEDICINE_SEARCH_RESULT");
-                    rasaDto.setMedicineList(medicine);
-                    break;
+        //알약 검색
+        if(Objects.equals(rasaCustomDto.getAction(), "DB_SEARCH")){
+            List<Medicine> medicine = medicineService.getMedicine(rasaCustomDto.getData()).getData();
+            rasaDto.setMedicineList(medicine);
+        }
+
+        //Naver API 검색
+        if(Objects.equals(rasaCustomDto.getAction(), "WEB_SEARCH")){
+            //Naver API 로 받아옴
+            NaverApiResponseDto data = naverApiController.send(rasaCustomDto.getData().getQuery()).block();
+            GeminiDto geminiDto = new GeminiDto();
+            geminiDto.setSender(chatBotClientDto.getSender());
+            geminiDto.setQuery(rasaCustomDto.getData().getQuery());
+
+            if(data==null) rasaDto.setText("죄송합니다 네이버 지식인 검색에 실패하였습니다.");
+            else if(data.getTotal()>0) {
+                //Naver API 로 받아온 데이터를 가공하여 Gemini에 보낼 수 있도록 세팅(검색결과 최대 10개)
+                List<GeminiSenderDataDto> geminiSenderDataDtos = new ArrayList<>();
+
+                for (NaverSearchItemDto naverSearchItemDto : data.getItems()) {
+                    GeminiSenderDataDto geminiSenderDataDto = new GeminiSenderDataDto();
+                    geminiSenderDataDto.setTitle(naverSearchItemDto.getTitle());
+                    geminiSenderDataDto.setLink(naverSearchItemDto.getLink());
+                    geminiSenderDataDtos.add(geminiSenderDataDto);
                 }
+                geminiDto.setData(geminiSenderDataDtos);
 
-                //Naver API 검색
-                if(Objects.equals(rasaCustomDto.getAction(), "WEB_SEARCH")){
-                    //Naver API 로 받아옴
-                    NaverApiResponseDto data = naverApiController.send(rasaCustomDto.getData().getQuery()).block();
-                    //rasaDto.setText("SYMPTOM_SEARCH_RESULT");
-                    GeminiDto geminiDto = new GeminiDto();
-                    geminiDto.setSender(chatBotClientDto.getSender());
-                    geminiDto.setQuery(rasaCustomDto.getData().getQuery());
+                try {
+                    rasaDto = geminiController.send(geminiDto).block();
+                    rasaDto.setCustom(rasaCustomDto);
 
-                    if(data==null){
-                        RasaDto tempRasaDto = new RasaDto();
-                        tempRasaDto.setText("Sorry There is No Naver Knowledge In Result");
-                        listRasaDto.add(tempRasaDto);
-                        break;
-                    }
-
-                    //Naver API 로 받아온 데이터를 가공하여 Gemini에 보낼 수 있도록 세팅(검색결과 최대 10개)
-                    List<GeminiSenderDataDto> geminiSenderDataDtos = new ArrayList<>();
-                    if(data.getItems()!=null) {
-                        for(NaverSearchItemDto naverSearchItemDto : data.getItems()) {
-                            GeminiSenderDataDto geminiSenderDataDto = new GeminiSenderDataDto();
-                            geminiSenderDataDto.setTitle(naverSearchItemDto.getTitle());
-                            geminiSenderDataDto.setLink(naverSearchItemDto.getLink());
-                            geminiSenderDataDtos.add(geminiSenderDataDto);
-                        }
-                        geminiDto.setData(geminiSenderDataDtos);
-                        List<RasaDto> appendListRasaDto = new ArrayList<>();
-                        try {
-                            appendListRasaDto = geminiController.send(geminiDto).block();
-                        }catch (Exception e){
-                            logger.error(e.getMessage());
-                            RasaDto tempRasaDto = new RasaDto();
-                            tempRasaDto.setText("Sorry Gemini summary has been failed");
-                            listRasaDto.add(tempRasaDto);
-                        }
-                        if(appendListRasaDto !=null){
-                            listRasaDto.addAll(appendListRasaDto);
-                        }
-                        else{
-                            RasaDto tempRasaDto = new RasaDto();
-                            tempRasaDto.setText("No Result Gemini summary");
-                            listRasaDto.add(tempRasaDto);
-                        }
-                    }
-                    //Naver API 로 받아온 데이터가 없을 시 Gemini에 문서요약 요청 스킵 후 검색결과 없음 작성
-                    else{
-                        RasaDto tempRasaDto = new RasaDto();
-                        tempRasaDto.setText("Sorry there is No Search Result");
-                        listRasaDto.add(tempRasaDto);
-                    }
-                    break;
+                }
+                catch (Exception e) {
+                    logger.error(e.getMessage());
+                    RasaDto tempRasaDto = new RasaDto();
+                    tempRasaDto.setText("Sorry Gemini summary has been failed");
                 }
             }
+            //Naver API 로 받아온 데이터가 없을 시 Gemini에 문서요약 요청 스킵 후 검색결과 없음 작성
+            else{
+                rasaDto.setText("Sorry there is No Search Result");
+            }
         }
-        return new SuccessResponse<>(listRasaDto, 200);
+        return new SuccessResponse<>(rasaDto, 200);
     }
 
     private FindByMedicineChartDto convertStringToMedicineChartDto(String data) {

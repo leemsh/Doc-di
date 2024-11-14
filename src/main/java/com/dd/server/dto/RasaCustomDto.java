@@ -6,4 +6,5 @@ import lombok.Data;
 public class RasaCustomDto {
     private String action;
     private FindByMedicineChartDto data;
+    private String done;
 }

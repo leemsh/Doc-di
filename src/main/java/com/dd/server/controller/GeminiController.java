@@ -27,7 +27,7 @@ public class GeminiController {
             .defaultHeader("Content-Type", "application/json")
             .build();
 
-    public Mono<List<RasaDto>> send(GeminiDto geminiDto) {
+    public Mono<RasaDto> send(GeminiDto geminiDto) {
         return webClient.post()
                 .bodyValue(geminiDto)
                 .retrieve()
@@ -35,7 +35,7 @@ public class GeminiController {
                     logger.error("Error: Status Code {}", clientResponse.statusCode());
                     return Mono.error(new RuntimeException("Error: " + clientResponse.statusCode()));
                 })
-                .bodyToMono(new ParameterizedTypeReference<List<RasaDto>>() {})
+                .bodyToMono(new ParameterizedTypeReference<RasaDto>() {})
                 .doOnNext(rasaDtoList -> logger.info("Rasa 응답: {}", rasaDtoList))
                 .doOnError(e -> logger.error("Error occurred: {}", e.getMessage()));
     }
