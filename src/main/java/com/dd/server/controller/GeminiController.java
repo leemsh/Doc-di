@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GeminiController {
     // Rasa 서버 URL
-    private static final String RASA_URL = "http://147.185.221.23:36902/";
+    private static final String RASA_URL = "http://localhost:36902/";
     private static final String MESSAGE_PATH = "sum";
     protected static final Logger logger = LoggerFactory.getLogger(GeminiController.class);
 
